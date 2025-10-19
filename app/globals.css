@@ -116,8 +116,14 @@
     * {
         @apply border-border outline-ring/50;
     }
+
     body {
         @apply bg-background text-foreground transition-colors duration-500;
+    }
+
+    button:not(:disabled),
+    [role='button']:not(:disabled) {
+        cursor: pointer;
     }
 }
 
@@ -142,5 +148,5 @@
 }
 
 .animate-slide-down {
-    animation: slide-down .5s ease-out;
+    animation: slide-down 0.5s ease-out;
 }

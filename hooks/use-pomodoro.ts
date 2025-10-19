@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useSoundscape } from './use-soundscape';
 
 export type PomodoroMode = 'focus' | 'short-break' | 'long-break';
 export type PomodoroStatus = 'idle' | 'running' | 'paused' | 'finished';
@@ -12,13 +13,22 @@ interface UsePomodoroOptions {
     longBreakInterval?: number;
 }
 
+export const TIMER = {
+    FOCUS: 10,
+    SHORT_BREAK: 5,
+    LONG_BREAK: 15 * 60,
+    LONG_BREAK_CYCLE: 4,
+};
+
 export function usePomodoro({
-    focusDuration = 5,
-    shortBreakDuration = 2,
-    longBreakDuration = 15 * 60,
-    longBreakInterval = 4,
+    focusDuration = TIMER.FOCUS,
+    shortBreakDuration = TIMER.SHORT_BREAK,
+    longBreakDuration = TIMER.LONG_BREAK,
+    longBreakInterval = TIMER.LONG_BREAK_CYCLE,
 }: UsePomodoroOptions = {}) {
     const [mode, setMode] = useState<PomodoroMode>('focus');
+    const { togglePlay } = useSoundscape();
+
     const [status, setStatus] = useState<PomodoroStatus>('idle');
     const [timeLeft, setTimeLeft] = useState(focusDuration);
     const [cycleCount, setCycleCount] = useState(0);
@@ -44,21 +54,25 @@ export function usePomodoro({
     const start = () => {
         if (status === 'running') return;
         setStatus('running');
+        if (mode === 'focus') togglePlay();
     };
 
     const pause = () => {
         setStatus('paused');
+        if (mode === 'focus') togglePlay();
     };
 
     const reset = () => {
         setStatus('idle');
         setTimeLeft(getDuration(mode));
+        if (mode === 'focus') togglePlay(false);
     };
 
     const switchMode = (newMode: PomodoroMode) => {
         setMode(newMode);
         setStatus('idle');
         setTimeLeft(getDuration(newMode));
+        if (mode === 'focus') togglePlay(false);
     };
 
     // countdown logic
@@ -66,7 +80,7 @@ export function usePomodoro({
         if (status !== 'running') return;
         timerRef.current = setInterval(() => {
             setTimeLeft((t) => {
-                if (t <= 1) {
+                if (t <= 0) {
                     clearInterval(timerRef.current!);
                     setStatus('finished');
                     return 0;
