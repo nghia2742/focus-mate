@@ -28,8 +28,7 @@ export function usePomodoro({
     longBreakInterval = TIMER.LONG_BREAK_CYCLE,
 }: UsePomodoroOptions = {}) {
     const [mode, setMode] = useState<PomodoroMode>('focus');
-    const { togglePlay } = useSoundscape();
-    const { isYoutubeReady, handlePlay } = useSound();
+    const { handlePlay } = useSound();
 
     const [status, setStatus] = useState<PomodoroStatus>('idle');
     const [timeLeft, setTimeLeft] = useState(focusDuration);
@@ -56,49 +55,25 @@ export function usePomodoro({
     const start = () => {
         if (status === 'running') return;
         setStatus('running');
-        if (mode === 'focus') {
-            if (isYoutubeReady) {
-                handlePlay(true);
-                return;
-            }
-            togglePlay();
-        }
+        if (mode === 'focus') handlePlay(true);
     };
 
     const pause = () => {
         setStatus('paused');
-        if (mode === 'focus') {
-            if (isYoutubeReady) {
-                handlePlay(false);
-                return;
-            }
-            togglePlay();
-        }
+        if (mode === 'focus') handlePlay(false);
     };
 
     const reset = () => {
         setStatus('idle');
         setTimeLeft(getDuration(mode));
-        if (mode === 'focus') {
-            if (isYoutubeReady) {
-                handlePlay(false);
-                return;
-            }
-            togglePlay(false);
-        }
+        if (mode === 'focus') handlePlay(false);
     };
 
     const switchMode = (newMode: PomodoroMode) => {
         setMode(newMode);
         setStatus('idle');
         setTimeLeft(getDuration(newMode));
-        if (mode === 'focus') {
-            if (isYoutubeReady) {
-                handlePlay(false);
-                return;
-            }
-            togglePlay(false);
-        }
+        if (mode === 'focus') handlePlay(false);
     };
 
     // countdown logic

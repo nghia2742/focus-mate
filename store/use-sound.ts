@@ -7,7 +7,8 @@ export type SoundState = {
     sound: SoundscapeType;
     inputUrl?: string;
     isYoutubeReady?: boolean;
-    isYoutubePlaying?: boolean;
+    isPlaying?: boolean;
+    type: 'soundscape' | 'youtube';
     setSound: (s: SoundscapeType) => void;
     handleApply: (url: string) => void;
     handleClose: () => void;
@@ -15,11 +16,26 @@ export type SoundState = {
 };
 
 const initializer: StateCreator<SoundState> = (set) => ({
-    sound: 'rain',
+    sound: null,
+    type: 'soundscape',
     setSound: (s: SoundscapeType) => set({ sound: s }),
-    handleApply: (url: string) => set({ inputUrl: url, isYoutubeReady: true, isYoutubePlaying: false }),
-    handleClose: () => set({ inputUrl: '', isYoutubeReady: false, isYoutubePlaying: false }),
-    handlePlay: (on?: boolean) => set((state) => ({ isYoutubePlaying: on ?? !state.isYoutubePlaying })),
+    handleApply: (url: string) =>
+        set({
+            inputUrl: url,
+            sound: null,
+            isYoutubeReady: true,
+            type: 'youtube',
+            isPlaying: false,
+        }),
+    handleClose: () =>
+        set({
+            inputUrl: '',
+            isYoutubeReady: false,
+            type: 'soundscape',
+            isPlaying: false,
+        }),
+    handlePlay: (on?: boolean) =>
+        set((state) => ({ isPlaying: on ?? !state.isPlaying })),
 });
 
 export const useSound = create<SoundState>(initializer);

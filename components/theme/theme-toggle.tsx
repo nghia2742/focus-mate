@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Moon, Sun } from 'lucide-react';
+import { LoaderIcon, Moon, Sun } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import { useCallback, useEffect, useState } from 'react';
@@ -49,7 +49,7 @@ export function ThemeToggle() {
                         transition={{ duration: 0.18 }}
                         className="inline-flex"
                     >
-                        {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                        {mounted ? (theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />) : <LoaderIcon className='animate-spin'/>}
                     </motion.span>
                 </AnimatePresence>
             </Button>

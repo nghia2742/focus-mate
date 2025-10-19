@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import useSound from "@/store/use-sound";
 import { Music } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
     Popover,
@@ -11,17 +11,36 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { Input } from "../ui/input";
+import { toast } from "sonner";
 
 const sounds = [
-    { key: "rain" as const, label: "Rain", icon: '🌧️' },
-    { key: "fire" as const, label: "Fire", icon: '🔥' },
-    { key: "windy" as const, label: "Windy", icon: '💨' },
+    { key: "rain" as const, label: "Rain", icon: '🌧️', source: '/sounds/rain/rain_1.mp3' },
+    { key: "fire" as const, label: "Fire", icon: '🔥', source: '/sounds/fire/fire_1.mp3' },
+    { key: "windy" as const, label: "Windy", icon: '💨', source: '/sounds/windy/windy_1.mp3' },
 ];
 
 export function SoundscapeSelector() {
-    const { sound, setSound, handleApply } = useSound();
+    const { sound, type, isPlaying, setSound, handleApply } = useSound();
     const [isVisible, setIsVisible] = useState(false);
     const [inputUrl, setInputUrl] = useState('');
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    useEffect(() => {
+        if (!sound) return;
+        const audio = new Audio(sounds.find(s => s.key === sound)?.source);
+        audio.loop = true;
+        audio.volume = 1;
+        audioRef.current = audio;
+        if (!audio) return;
+    }, [sound]);
+
+    useEffect(() => {
+        if (audioRef.current && type === 'soundscape') {
+            if (isPlaying) audioRef.current.play();
+            else audioRef.current.pause();
+        }
+        if (isPlaying) setIsVisible(false);
+    }, [isPlaying, type]);
 
     return (
         <div className="absolute top-12 left-0 m-4">
@@ -30,6 +49,7 @@ export function SoundscapeSelector() {
                     size='icon'
                     variant={"outline"}
                     onClick={() => setIsVisible(!isVisible)}
+                    disabled={isPlaying}
                 >
                     <Music />
                 </Button>
@@ -48,7 +68,13 @@ export function SoundscapeSelector() {
                                         key={s.key}
                                         size='icon'
                                         variant={sound === s.key ? "secondary" : "ghost"}
-                                        onClick={() => setSound(s.key)}
+                                        onClick={() => {
+                                            if (type === 'youtube') {
+                                                toast.info("Close YouTube sound before playing soundscape.")
+                                                return
+                                            };
+                                            setSound(s.key)
+                                        }}
                                         className="cursor-pointer border-none shadow-2xl"
                                     >
                                         {s.icon}
