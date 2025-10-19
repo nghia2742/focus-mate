@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSoundscape } from './use-soundscape';
+import useSound from '@/store/use-sound';
 
 export type PomodoroMode = 'focus' | 'short-break' | 'long-break';
 export type PomodoroStatus = 'idle' | 'running' | 'paused' | 'finished';
@@ -14,8 +15,8 @@ interface UsePomodoroOptions {
 }
 
 export const TIMER = {
-    FOCUS: 10,
-    SHORT_BREAK: 5,
+    FOCUS: 25 * 60,
+    SHORT_BREAK: 5 * 60,
     LONG_BREAK: 15 * 60,
     LONG_BREAK_CYCLE: 4,
 };
@@ -28,6 +29,7 @@ export function usePomodoro({
 }: UsePomodoroOptions = {}) {
     const [mode, setMode] = useState<PomodoroMode>('focus');
     const { togglePlay } = useSoundscape();
+    const { isYoutubeReady, handlePlay } = useSound();
 
     const [status, setStatus] = useState<PomodoroStatus>('idle');
     const [timeLeft, setTimeLeft] = useState(focusDuration);
@@ -54,25 +56,49 @@ export function usePomodoro({
     const start = () => {
         if (status === 'running') return;
         setStatus('running');
-        if (mode === 'focus') togglePlay();
+        if (mode === 'focus') {
+            if (isYoutubeReady) {
+                handlePlay(true);
+                return;
+            }
+            togglePlay();
+        }
     };
 
     const pause = () => {
         setStatus('paused');
-        if (mode === 'focus') togglePlay();
+        if (mode === 'focus') {
+            if (isYoutubeReady) {
+                handlePlay(false);
+                return;
+            }
+            togglePlay();
+        }
     };
 
     const reset = () => {
         setStatus('idle');
         setTimeLeft(getDuration(mode));
-        if (mode === 'focus') togglePlay(false);
+        if (mode === 'focus') {
+            if (isYoutubeReady) {
+                handlePlay(false);
+                return;
+            }
+            togglePlay(false);
+        }
     };
 
     const switchMode = (newMode: PomodoroMode) => {
         setMode(newMode);
         setStatus('idle');
         setTimeLeft(getDuration(newMode));
-        if (mode === 'focus') togglePlay(false);
+        if (mode === 'focus') {
+            if (isYoutubeReady) {
+                handlePlay(false);
+                return;
+            }
+            togglePlay(false);
+        }
     };
 
     // countdown logic

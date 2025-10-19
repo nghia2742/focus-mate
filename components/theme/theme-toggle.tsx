@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Moon, Sun } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -32,17 +33,25 @@ export function ThemeToggle() {
         }
     }, [mounted, handleKeyDown]);
 
-    if (!mounted) return null;
-
     return (
         <div className="absolute top-0 left-0 m-4">
             <Button
-                className='cursor-pointer'
                 variant={"outline"}
                 size="icon"
                 onClick={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
             >
-                {theme === 'dark' ? <Sun className="w-4 h-4 animate-slide-down" /> : <Moon className="w-4 h-4 animate-slide-down" />}
+                <AnimatePresence mode="wait" initial={false}>
+                    <motion.span
+                        key={theme}
+                        initial={{ y: -6, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: 6, opacity: 0 }}
+                        transition={{ duration: 0.18 }}
+                        className="inline-flex"
+                    >
+                        {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                    </motion.span>
+                </AnimatePresence>
             </Button>
         </div>
     );
