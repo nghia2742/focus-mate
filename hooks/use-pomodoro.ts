@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useSoundscape } from './use-soundscape';
 import useSound from '@/store/use-sound';
 
 export type PomodoroMode = 'focus' | 'short-break' | 'long-break';
