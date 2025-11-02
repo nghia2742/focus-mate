@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ListFilter } from "lucide-react";
 
 type Message = {
   role: "user" | "assistant" | "system";
@@ -153,7 +155,6 @@ export function AIConsultant() {
             <div className="relative p-3 border-b border-white/10 flex items-center justify-between bg-gradient-to-b from-white/10 to-transparent">
               <div className="text-sm font-medium">AI Consultant</div>
               <div className="flex items-center gap-2">
-                <FieldSelect field={field} setField={setField} />
                 <Button size="icon-sm" variant="ghost" onClick={() => setOpen(false)}>
                   ✕
                 </Button>
@@ -186,8 +187,9 @@ export function AIConsultant() {
                   onKeyDown={handleKeyDown}
                   placeholder={`Ask about ${field.toLowerCase()}...`}
                   disabled={loading}
-                  className="bg-white/10 border-white/20 placeholder:text-foreground/50"
+                  className="bg-white/10 border-white/20 placeholder:text-foreground/50 flex-1"
                 />
+                <CategoryPicker field={field} setField={setField} />
                 <Button
                   onClick={sendMessage}
                   disabled={loading || !input.trim()}
@@ -256,24 +258,41 @@ function ChatBubble({ role, content }: { role: "user" | "assistant"; content: st
   );
 }
 
-function FieldSelect({
+function CategoryPicker({
   field,
   setField,
 }: {
   field: string;
   setField: (v: string) => void;
 }) {
+  const [open, setOpen] = useState(false);
   return (
-    <select
-      className="h-8 rounded-md border bg-white/10 backdrop-blur px-2 text-xs outline-none border-white/20"
-      value={field}
-      onChange={(e) => setField(e.target.value)}
-    >
-      {FOCUS_FIELDS.map((f) => (
-        <option key={f} value={f}>
-          {f}
-        </option>
-      ))}
-    </select>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button size="icon-sm" variant="outline" title={`Category: ${field}`} className="shrink-0">
+          <ListFilter className="size-4" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-56 p-2">
+        <div className="text-xs mb-2 text-muted-foreground">Focus category</div>
+        <div className="grid gap-1">
+          {FOCUS_FIELDS.map((f) => (
+            <button
+              key={f}
+              className={cn(
+                "w-full text-left rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground",
+                f === field && "bg-accent/60"
+              )}
+              onClick={() => {
+                setField(f);
+                setOpen(false);
+              }}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }

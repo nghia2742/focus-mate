@@ -47,8 +47,8 @@ export function PomodoroTimer() {
 }
 
 function GlassCircle({ percent, children }: { percent: number; children: React.ReactNode }) {
-    const size = 420;
-    const ring = 14;
+    const size = 340;
+    const ring = 12;
     const inner = size - ring * 2;
     const radius = (size - ring) / 2;
     const circumference = 2 * Math.PI * radius;
@@ -70,7 +70,7 @@ function GlassCircle({ percent, children }: { percent: number; children: React.R
                     cx={size / 2}
                     cy={size / 2}
                     r={radius}
-                    stroke="rgba(255,255,255,0.3)"
+                    stroke="rgba(255,255,255,0.25)"
                     strokeWidth={ring}
                     fill="none"
                 />
@@ -93,7 +93,7 @@ function GlassCircle({ percent, children }: { percent: number; children: React.R
             {/* Inner glass content */}
             <div
                 className={cn(
-                    "absolute inset-[14px] rounded-full",
+                    "absolute inset-[12px] rounded-full",
                     "backdrop-blur-xl border border-white/25",
                     "shadow-[inset_0_40px_80px_-40px_rgba(255,255,255,0.6),0_30px_80px_-20px_rgba(0,0,0,0.35)]",
                     "overflow-visible"
