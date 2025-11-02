@@ -137,7 +137,7 @@ export function AIConsultant() {
             exit={{ opacity: 0, y: 24 }}
             transition={{ duration: 0.2 }}
             className={cn(
-              "relative w-[360px] sm:w-[420px] max-h-[70vh] rounded-2xl border shadow-2xl backdrop-blur-xl overflow-hidden",
+              "relative w-[360px] sm:w-[420px] max-h-[70vh] rounded-2xl border shadow-2xl backdrop-blur-xl",
               "flex flex-col",
               // Glass liquid style: subtle gradient border and translucent inner
               "border-white/15 bg-white/8 dark:bg-white/5"
