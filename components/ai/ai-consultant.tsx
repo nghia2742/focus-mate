@@ -12,6 +12,11 @@ type Message = {
   content: string;
 };
 
+type VisibleMessage = Extract<Message, { role: "user" | "assistant" }>;
+function isVisibleMessage(m: Message): m is VisibleMessage {
+  return m.role === "user" || m.role === "assistant";
+}
+
 const FOCUS_FIELDS = [
   "Productivity",
   "Time Management",
@@ -40,7 +45,7 @@ export function AIConsultant() {
   }, [messages, open]);
 
   const visibleMessages = useMemo(
-    () => messages.filter((m) => m.role !== "system"),
+    () => messages.filter(isVisibleMessage),
     [messages]
   );
 
@@ -78,7 +83,7 @@ export function AIConsultant() {
         data?.raw?.choices?.[0]?.message?.content ||
         "Sorry, I couldn't generate a response.";
       setMessages((prev) => [...prev, { role: "assistant", content }]);
-    } catch (e) {
+    } catch (_err) {
       toast.error("Consultant error. Check server logs and API key.");
     } finally {
       setLoading(false);
