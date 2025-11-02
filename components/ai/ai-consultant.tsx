@@ -209,10 +209,13 @@ export function AIConsultant() {
               size="lg"
               onClick={() => setOpen(true)}
               className={cn(
-                "shadow-lg rounded-2xl px-5",
-                "backdrop-blur-lg border border-white/20 bg-white/10"
+                "shadow-lg rounded-2xl px-5 gap-2",
+                // High-contrast solid button to ensure visibility on white backgrounds
+                "bg-primary text-primary-foreground hover:bg-primary/90 border border-black/10"
               )}
             >
+              {/* Simple message icon using unicode to avoid extra imports */}
+              <span aria-hidden>💬</span>
               Ask AI Consultant
             </Button>
           </motion.div>
