@@ -137,7 +137,8 @@ export function AIConsultant() {
             exit={{ opacity: 0, y: 24 }}
             transition={{ duration: 0.2 }}
             className={cn(
-              "relative w-[360px] sm:w-[420px] rounded-2xl border shadow-2xl backdrop-blur-xl overflow-hidden",
+              "relative w-[360px] sm:w-[420px] max-h-[70vh] rounded-2xl border shadow-2xl backdrop-blur-xl overflow-hidden",
+              "flex flex-col",
               // Glass liquid style: subtle gradient border and translucent inner
               "border-white/15 bg-white/8 dark:bg-white/5"
             )}
@@ -159,7 +160,7 @@ export function AIConsultant() {
               </div>
             </div>
 
-            <div className="relative max-h-[55vh] overflow-y-auto p-3 space-y-3">
+            <div className="relative flex-1 overflow-y-auto overscroll-contain p-3 space-y-3 [scrollbar-width:thin] [scrollbar-color:theme(colors.primary)_transparent]">
               {visibleMessages.length === 0 && (
                 <div className="text-xs text-muted-foreground">
                   Ask anything about focus fields like productivity, time management, deep work, habits, wellness, or learning.
