@@ -13,6 +13,7 @@ export function YoutubePlayer() {
   const { inputUrl, isYoutubeReady, isPlaying, handlePlay, handleClose } = useSound();
   const [isMinimized, setIsMinimized] = useState(false);
   const playerRef = useRef<HTMLDivElement>(null);
+  const boundsRef = useRef<HTMLDivElement>(null);
 
   const handleFullScreen = () => {
     if (!document.fullscreenElement) {
@@ -43,7 +44,7 @@ export function YoutubePlayer() {
   if (!isYoutubeReady) return null;
 
   return (
-    <div className="fixed inset-0 z-40 pointer-events-none">
+    <div ref={boundsRef} className="fixed inset-0 z-40 pointer-events-none">
       <motion.div
         className="absolute pointer-events-auto bottom-4 right-4 group w-[min(92vw,360px)] md:w-[min(92vw,480px)] overflow-hidden rounded-lg"
         initial={{ opacity: 0, scale: 0.95, y: 50 }}
@@ -52,7 +53,7 @@ export function YoutubePlayer() {
         drag
         dragMomentum
         dragElastic={0.12}
-        dragConstraints={{ left: 0, top: 0, right: window.innerWidth - 64, bottom: window.innerHeight - 64 }}
+        dragConstraints={boundsRef}
       >
         <div ref={playerRef}>
           {isMinimized && <Button className={cn("absolute bottom-0 right-0")} size={"icon"} onClick={() => setIsMinimized(!isMinimized)}> <ExternalLink className="-rotate-90" /> </Button>}

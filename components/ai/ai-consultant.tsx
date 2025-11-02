@@ -41,6 +41,7 @@ export function AIConsultant() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const boundsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -128,7 +129,7 @@ export function AIConsultant() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 pointer-events-none">
+    <div ref={boundsRef} className="fixed inset-0 z-50 pointer-events-none">
       <div className="absolute bottom-4 left-4 pointer-events-auto">
         <AnimatePresence initial={false}>
           {open ? (
@@ -137,7 +138,7 @@ export function AIConsultant() {
               drag
               dragMomentum
               dragElastic={0.12}
-              dragConstraints={{ left: 0, top: 0, right: window.innerWidth - 64, bottom: window.innerHeight - 64 }}
+              dragConstraints={boundsRef}
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 24 }}
@@ -216,7 +217,7 @@ export function AIConsultant() {
               drag
               dragMomentum
               dragElastic={0.12}
-              dragConstraints={{ left: 0, top: 0, right: window.innerWidth - 64, bottom: window.innerHeight - 64 }}
+              dragConstraints={boundsRef}
             >
               <Button
                 size="lg"
