@@ -2,6 +2,7 @@ import { PomodoroTimer } from "@/components/pomodoro/pomodoro-timer";
 import { SoundscapeSelector } from "@/components/sounds/sound-selector";
 import { YoutubePlayer } from "@/components/sounds/youtube-player";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
+import { AIConsultant } from "@/components/ai/ai-consultant";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       <PomodoroTimer />
 
       <YoutubePlayer />
+      <AIConsultant />
     </div>
   );
 }

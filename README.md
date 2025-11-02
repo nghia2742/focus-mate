@@ -20,6 +20,29 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## AI Consultant (OpenRouter)
+
+An AI consultant widget is included. It uses OpenRouter's Chat Completions API to answer questions about focus fields (productivity, time management, deep work, habits, wellness, learning).
+
+### Setup
+
+1. Create `.env.local` and add your OpenRouter key:
+   ```
+   OPENROUTER_API_KEY=sk-or-...
+   ```
+2. Restart the dev server after setting the env var.
+
+### Usage
+
+- Click "Ask AI Consultant" on the bottom-right and start chatting.
+- You can select a focus field to guide the consultant's answer tone.
+
+### Code Pointers
+
+- API route proxy: `app/api/consultant/route.ts`
+- Client widget: `components/ai/ai-consultant.tsx`
+- Mounted on the home page in `app/page.tsx`
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
