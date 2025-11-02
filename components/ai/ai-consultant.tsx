@@ -25,14 +25,16 @@ const FOCUS_FIELDS = [
   "Learning",
 ];
 
+const BASE_SYSTEM =
+  "You are Focus Mate, an AI consultant that gives clear, practical, and evidence-based advice about productivity, focus, time management, deep work, habits, wellness, and effective learning. Keep answers concise but actionable. Where helpful, suggest short step-by-step plans.";
+
 export function AIConsultant() {
   const [open, setOpen] = useState(false);
   const [field, setField] = useState<string>("Productivity");
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "system",
-      content:
-        "You are Focus Mate, an AI consultant that gives clear, practical, and evidence-based advice about productivity, focus, time management, deep work, habits, wellness, and effective learning. Keep answers concise but actionable. Where helpful, suggest short step-by-step plans.",
+      content: BASE_SYSTEM,
     },
   ]);
   const [input, setInput] = useState("");
@@ -51,6 +53,30 @@ export function AIConsultant() {
     [messages]
   );
 
+  // Build a dynamic system prompt that carries session context.
+  const dynamicSystem = useMemo(() => {
+    const lastUsers = visibleMessages
+      .filter((m) => m.role === "user")
+      .slice(-3)
+      .map((m) => `- ${m.content}`)
+      .join("\n");
+    const lastAssistant = visibleMessages
+      .filter((m) => m.role === "assistant")
+      .slice(-3)
+      .map((m) => `- ${m.content.substring(0, 200)}${m.content.length > 200 ? "..." : ""}`)
+      .join("\n");
+
+    return [
+      BASE_SYSTEM,
+      `Focus field: ${field}.`,
+      lastUsers ? `Recent user intents:\n${lastUsers}` : "",
+      lastAssistant ? `Your recent advice (truncated):\n${lastAssistant}` : "",
+      "When responding, consider the recent intents and avoid repeating prior advice. If a plan already exists, build on it with next steps or deeper guidance.",
+    ]
+      .filter(Boolean)
+      .join("\n\n");
+  }, [field, visibleMessages]);
+
   async function sendMessage() {
     const trimmed = input.trim();
     if (!trimmed) return;
@@ -65,11 +91,11 @@ export function AIConsultant() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: [...messages, userMsg].map(({ role, content }) => ({
-            role,
-            content,
-          })),
-          // model: "openai/gpt-oss-20b:free", // default set in API route
+          // Send only non-system messages; system will be injected via `system`
+          messages: [...messages, userMsg]
+            .filter((m) => m.role !== "system")
+            .map(({ role, content }) => ({ role, content })),
+          system: dynamicSystem,
           temperature: 0.6,
         }),
       });
@@ -110,9 +136,20 @@ export function AIConsultant() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 24 }}
             transition={{ duration: 0.2 }}
-            className="w-[360px] sm:w-[420px] rounded-xl border shadow-2xl bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+            className={cn(
+              "relative w-[360px] sm:w-[420px] rounded-2xl border shadow-2xl backdrop-blur-xl overflow-hidden",
+              // Glass liquid style: subtle gradient border and translucent inner
+              "border-white/15 bg-white/8 dark:bg-white/5"
+            )}
           >
-            <div className="p-3 border-b flex items-center justify-between">
+            {/* Animated liquid blobs */}
+            <div className="pointer-events-none absolute inset-0">
+              <div className="absolute -top-16 -right-10 size-56 rounded-full bg-gradient-to-br from-primary/25 to-transparent blur-2xl animate-[float_12s_ease-in-out_infinite]" />
+              <div className="absolute -bottom-20 -left-10 size-64 rounded-full bg-gradient-to-tr from-purple-500/20 to-cyan-400/20 blur-3xl animate-[float_14s_ease-in-out_infinite_reverse]" />
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+            </div>
+
+            <div className="relative p-3 border-b border-white/10 flex items-center justify-between bg-gradient-to-b from-white/10 to-transparent">
               <div className="text-sm font-medium">AI Consultant</div>
               <div className="flex items-center gap-2">
                 <FieldSelect field={field} setField={setField} />
@@ -122,7 +159,7 @@ export function AIConsultant() {
               </div>
             </div>
 
-            <div className="max-h-[50vh] overflow-y-auto p-3 space-y-3">
+            <div className="relative max-h-[55vh] overflow-y-auto p-3 space-y-3">
               {visibleMessages.length === 0 && (
                 <div className="text-xs text-muted-foreground">
                   Ask anything about focus fields like productivity, time management, deep work, habits, wellness, or learning.
@@ -131,20 +168,33 @@ export function AIConsultant() {
               {visibleMessages.map((m, i) => (
                 <ChatBubble key={i} role={m.role} content={m.content} />
               ))}
+              {loading && (
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <span className="inline-flex size-2 rounded-full bg-primary animate-pulse" />
+                  Thinking...
+                </div>
+              )}
               <div ref={bottomRef} />
             </div>
 
-            <div className="p-3 border-t flex items-center gap-2">
-              <Input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder={`Ask about ${field.toLowerCase()}...`}
-                disabled={loading}
-              />
-              <Button onClick={sendMessage} disabled={loading || !input.trim()}>
-                {loading ? "..." : "Send"}
-              </Button>
+            <div className="relative p-3 border-t border-white/10 bg-gradient-to-t from-white/5 to-transparent">
+              <div className="flex items-center gap-2">
+                <Input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder={`Ask about ${field.toLowerCase()}...`}
+                  disabled={loading}
+                  className="bg-white/10 border-white/20 placeholder:text-foreground/50"
+                />
+                <Button
+                  onClick={sendMessage}
+                  disabled={loading || !input.trim()}
+                  className="shadow-md"
+                >
+                  {loading ? "..." : "Send"}
+                </Button>
+              </div>
             </div>
           </motion.div>
         ) : (
@@ -154,7 +204,14 @@ export function AIConsultant() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 24 }}
           >
-            <Button size="lg" onClick={() => setOpen(true)} className="shadow-lg">
+            <Button
+              size="lg"
+              onClick={() => setOpen(true)}
+              className={cn(
+                "shadow-lg rounded-2xl px-5",
+                "backdrop-blur-lg border border-white/20 bg-white/10"
+              )}
+            >
               Ask AI Consultant
             </Button>
           </motion.div>
@@ -175,10 +232,10 @@ function ChatBubble({ role, content }: { role: "user" | "assistant"; content: st
     >
       <div
         className={cn(
-          "max-w-[80%] rounded-lg px-3 py-2 text-sm whitespace-pre-wrap break-words",
+          "max-w-[80%] rounded-xl px-3 py-2 text-sm whitespace-pre-wrap break-words border",
           isUser
-            ? "bg-primary text-primary-foreground rounded-br-sm"
-            : "bg-muted text-foreground rounded-bl-sm"
+            ? "bg-primary/90 text-primary-foreground border-white/20 shadow-md"
+            : "bg-white/10 backdrop-blur border-white/15 shadow-md"
         )}
       >
         {isUser ? (
@@ -204,7 +261,7 @@ function FieldSelect({
 }) {
   return (
     <select
-      className="h-8 rounded-md border bg-background px-2 text-xs outline-none"
+      className="h-8 rounded-md border bg-white/10 backdrop-blur px-2 text-xs outline-none border-white/20"
       value={field}
       onChange={(e) => setField(e.target.value)}
     >
