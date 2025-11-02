@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 type Message = {
   role: "user" | "assistant" | "system";
@@ -179,7 +181,15 @@ function ChatBubble({ role, content }: { role: "user" | "assistant"; content: st
             : "bg-muted text-foreground rounded-bl-sm"
         )}
       >
-        {content}
+        {isUser ? (
+          content
+        ) : (
+          <div className="prose prose-invert prose-sm max-w-none [&>p]:my-2 [&_code]:bg-background/60 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {content}
+            </ReactMarkdown>
+          </div>
+        )}
       </div>
     </div>
   );
