@@ -43,39 +43,45 @@ export function YoutubePlayer() {
   if (!isYoutubeReady) return null;
 
   return (
-    <motion.div
-      className="absolute group bottom-4 right-4 z-5 w-full max-w-xs md:max-w-md overflow-hidden rounded-lg"
-      initial={{ opacity: 0, scale: 0.95, y: 50 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ type: "spring", stiffness: 250, damping: 20 }}
-    >
-      <div ref={playerRef}>
-        {isMinimized && <Button className={cn("absolute bottom-0 right-0")} size={"icon"} onClick={() => setIsMinimized(!isMinimized)}> <ExternalLink className="-rotate-90" /> </Button>}
-        <motion.div
-          className={cn("aspect-video", isMinimized && "invisible")}
-          animate={{ y: isMinimized ? 200 : 0, x: isMinimized ? 200 : 0, opacity: 1 }}
-          transition={{ duration: 0.75 }}
-        >
-          <div className="flex p-1 px-2 gap-1 bg-muted w-full">
-            <Button className="z-10 rounded-full size-4 bg-[#FF5F57]" size={"icon-sm"} onClick={handleClose}> <X className="size-3" /> </Button>
-            <Button className="z-10 rounded-full size-4 bg-[#FFBD2E]" size={"icon-sm"} onClick={handleMinimize}> <Minus className="size-3" /> </Button>
-            <Button className="z-10 rounded-full size-4 bg-[#28C940]" size={"icon-sm"} onClick={handleFullScreen}> <ChevronsUpDown className="size-3 -rotate-45" /> </Button>
-          </div>
-          <ReactPlayer
-            src={inputUrl}
-            playing={isPlaying}
-            controls
-            width="100%"
-            height="100%"
-            style={{ borderRadius: "0.75rem" }}
-            onPlay={() => handlePlay(true)}
-            onError={() => {
-              handleClose();
-              toast.error("Failed to load the video. Please check the URL and try again.");
-            }}
-          />
-        </motion.div>
-      </div>
-    </motion.div>
+    <div className="fixed inset-0 z-40 pointer-events-none">
+      <motion.div
+        className="absolute pointer-events-auto bottom-4 right-4 group w-[min(92vw,360px)] md:w-[min(92vw,480px)] overflow-hidden rounded-lg"
+        initial={{ opacity: 0, scale: 0.95, y: 50 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 250, damping: 20 }}
+        drag
+        dragMomentum
+        dragElastic={0.12}
+        dragConstraints={{ left: 0, top: 0, right: window.innerWidth - 64, bottom: window.innerHeight - 64 }}
+      >
+        <div ref={playerRef}>
+          {isMinimized && <Button className={cn("absolute bottom-0 right-0")} size={"icon"} onClick={() => setIsMinimized(!isMinimized)}> <ExternalLink className="-rotate-90" /> </Button>}
+          <motion.div
+            className={cn("aspect-video", isMinimized && "invisible")}
+            animate={{ y: isMinimized ? 200 : 0, x: isMinimized ? 200 : 0, opacity: 1 }}
+            transition={{ duration: 0.75 }}
+          >
+            <div className="flex p-1 px-2 gap-1 bg-muted w-full">
+              <Button className="z-10 rounded-full size-4 bg-[#FF5F57]" size={"icon-sm"} onClick={handleClose}> <X className="size-3" /> </Button>
+              <Button className="z-10 rounded-full size-4 bg-[#FFBD2E]" size={"icon-sm"} onClick={handleMinimize}> <Minus className="size-3" /> </Button>
+              <Button className="z-10 rounded-full size-4 bg-[#28C940]" size={"icon-sm"} onClick={handleFullScreen}> <ChevronsUpDown className="size-3 -rotate-45" /> </Button>
+            </div>
+            <ReactPlayer
+              src={inputUrl}
+              playing={isPlaying}
+              controls
+              width="100%"
+              height="100%"
+              style={{ borderRadius: "0.75rem" }}
+              onPlay={() => handlePlay(true)}
+              onError={() => {
+                handleClose();
+                toast.error("Failed to load the video. Please check the URL and try again.");
+              }}
+            />
+          </motion.div>
+        </div>
+      </motion.div>
+    </div>
   );
 }
