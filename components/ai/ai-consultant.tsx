@@ -158,18 +158,17 @@ export function AIConsultant() {
               </div>
 
               <div className="relative p-3 border-b border-white/10 flex items-center justify-between bg-gradient-to-b from-white/10 to-transparent">
-              <div className="flex items-center gap-2">
-                <div className="text-sm font-medium">AI Consultant</div>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 border border-white/15">
-                  {field}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button size="icon-sm" variant="ghost" onClick={() => setOpen(false)}>
-                  ✕
-                </Button>
-              </div>
-            </div>
+                <div className="flex items-center gap-2">
+                  <div className="text-sm font-medium">AI Consultant</div>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 border border-white/15">
+                    {field}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button size="icon-sm" variant="ghost" onClick={() => setOpen(false)}>
+                    ✕
+                  </Button>
+                </div>
               </div>
 
               <div className="relative flex-1 overflow-y-auto overscroll-contain p-3 space-y-3">
