@@ -1,59 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Focus Mate
+
+A modern, minimal productivity app built with Next.js. It combines a liquid-glass Pomodoro timer, ambient soundscapes, a draggable YouTube player, and an AI Consultant powered by OpenRouter.
+
+## Features
+
+- Pomodoro Timer (Liquid Glass)
+  - Minimal 3D glass circle with realistic highlights
+  - Smooth circular progress ring around the glass
+  - Countdown displayed at the center
+  - Glass-styled control buttons (Start/Pause/Reset)
+- Soundscapes
+  - Built-in ambient loops: Rain, Fire, Windy
+  - Toggle and control playback with the UI
+- YouTube Player (Draggable)
+  - Paste a YouTube link from the Sound selector
+  - Draggable floating player (mobile/desktop)
+  - Minimize, close, and fullscreen controls
+- AI Consultant (OpenRouter)
+  - Draggable, responsive widget (initially bottom-left)
+  - Markdown-formatted answers with improved readability
+  - Category selector (icon + popover) for focus areas:
+    - Productivity, Time Management, Deep Work, Habits, Wellness, Learning
+  - Category is applied via system context (not added to user messages)
+  - Textarea input and Send icon; conversation scrollable within widget
+  - Server-side proxy to OpenRouter keeps the API key private
+- Theming and UX
+  - Light/Dark theme toggle
+  - Global glass/liquid background with subtle grid and blobs
+  - Toast notifications for actions and errors
+- State Management
+  - Zustand store for sound/YT state
+
+## Tech Stack
+
+- Next.js 15 (App Router, Turbopack)
+- React 19
+- Tailwind CSS v4
+- Framer Motion
+- Zustand
+- OpenRouter (Chat Completions API)
+- lucide-react icons
+- react-markdown + remark-gfm
 
 ## Getting Started
 
-First, run the development server:
-
+1) Install
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# with yarn (recommended by the repo)
+yarn
+# or npm / pnpm / bun
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2) Environment
+Create `.env.local` and add your OpenRouter key:
+```
+OPENROUTER_API_KEY=sk-or-...
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3) Run dev
+```bash
+yarn dev
+# open http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4) Build
+```bash
+yarn build
+yarn start
+```
 
-## AI Consultant (OpenRouter)
+## Usage Tips
 
-An AI consultant widget is included. It uses OpenRouter's Chat Completions API to answer questions about focus fields (productivity, time management, deep work, habits, wellness, learning).
+- AI Consultant
+  - Open the widget and drag it anywhere on the screen.
+  - Click the filter icon next to the textarea to choose a focus category.
+  - Answers are rendered with headings, lists, tables, code, and quotes.
+- YouTube Player
+  - In the sound selector, paste your YouTube link.
+  - Drag the player as needed; minimize or fullscreen with the window controls.
+- Timer
+  - Start/Pause/Reset controls beneath the glass timer.
+  - The outer ring fills smoothly as the session progresses.
 
-### Setup
+## Code Pointers
 
-1. Create `.env.local` and add your OpenRouter key:
-   ```
-   OPENROUTER_API_KEY=sk-or-...
-   ```
-2. Restart the dev server after setting the env var.
+- AI API proxy: `app/api/consultant/route.ts`
+- AI widget: `components/ai/ai-consultant.tsx`
+- Timer: `components/pomodoro/pomodoro-timer.tsx`
+- Sound selector: `components/sounds/sound-selector.tsx`
+- YouTube player: `components/sounds/youtube-player.tsx`
+- Theme toggle/provider: `components/theme/*`
 
-### Usage
+## Notes
 
-- Click "Ask AI Consultant" on the bottom-right and start chatting.
-- You can select a focus field to guide the consultant's answer tone.
+- The AI widget and YouTube player are draggable with framer-motion and constrained to the viewport.
+- The AI category is applied to model context (system prompt) and not injected into the user’s visible message.
+- The app uses a glassmorphism visual style with attention to readability and performance.
 
-### Code Pointers
+## License
 
-- API route proxy: `app/api/consultant/route.ts`
-- Client widget: `components/ai/ai-consultant.tsx`
-- Mounted on the home page in `app/page.tsx`
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
