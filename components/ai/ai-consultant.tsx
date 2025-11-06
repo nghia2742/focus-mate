@@ -83,8 +83,9 @@ export function AIConsultant() {
     const trimmed = input.trim();
     if (!trimmed) return;
 
-    const fieldPrefix = field ? `[${field}] ` : "";
-    const userMsg: Message = { role: "user", content: fieldPrefix + trimmed };
+    // Do NOT show category prefix in the visible user's message.
+    const userVisible = trimmed;
+    const userMsg: Message = { role: "user", content: userVisible };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setLoading(true);
@@ -97,7 +98,7 @@ export function AIConsultant() {
           messages: [...messages, userMsg]
             .filter((m) => m.role !== "system")
             .map(({ role, content }) => ({ role, content })),
-          system: dynamicSystem,
+          system: dynamicSystem, // includes the category context
           temperature: 0.6,
         }),
       });
@@ -157,12 +158,18 @@ export function AIConsultant() {
               </div>
 
               <div className="relative p-3 border-b border-white/10 flex items-center justify-between bg-gradient-to-b from-white/10 to-transparent">
+              <div className="flex items-center gap-2">
                 <div className="text-sm font-medium">AI Consultant</div>
-                <div className="flex items-center gap-2">
-                  <Button size="icon-sm" variant="ghost" onClick={() => setOpen(false)}>
-                    ✕
-                  </Button>
-                </div>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 border border-white/15">
+                  {field}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button size="icon-sm" variant="ghost" onClick={() => setOpen(false)}>
+                  ✕
+                </Button>
+              </div>
+            </div>
               </div>
 
               <div className="relative flex-1 overflow-y-auto overscroll-contain p-3 space-y-3 [scrollbar-width:thin] [scrollbar-color:theme(colors.primary)_transparent]">
@@ -240,27 +247,56 @@ export function AIConsultant() {
 
 function ChatBubble({ role, content }: { role: "user" | "assistant"; content: string }) {
   const isUser = role === "user";
+  const cleaned = isUser ? content : content.replace(/<br\\s*\\/?\\>/gi, "\\n");
   return (
-    <div
-      className={cn(
-        "flex",
-        isUser ? "justify-end" : "justify-start"
-      )}
-    >
+    <div className={cn("flex", isUser ? "justify-end" : "justify-start")}>
       <div
         className={cn(
-          "max-w-[80%] rounded-xl px-3 py-2 text-sm whitespace-pre-wrap break-words border",
+          "max-w-[80%] rounded-xl border shadow-md",
           isUser
-            ? "bg-primary/90 text-primary-foreground border-white/20 shadow-md"
-            : "bg-white/10 backdrop-blur border-white/15 shadow-md"
+            ? "bg-primary/90 text-primary-foreground border-white/20 px-3 py-2"
+            : "bg-white/5 backdrop-blur border-white/10"
         )}
       >
         {isUser ? (
-          content
+          <div className="whitespace-pre-wrap break-words text-sm">{cleaned}</div>
         ) : (
-          <div className="prose prose-invert prose-sm max-w-none [&>p]:my-2 [&_code]:bg-background/60 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {content}
+          <div className="prose prose-invert max-w-none">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                h1: ({ node, ...props }) => <h1 className="text-base font-semibold mt-2 mb-1" {...props} />,
+                h2: ({ node, ...props }) => <h2 className="text-base font-semibold mt-2 mb-1" {...props} />,
+                h3: ({ node, ...props }) => <h3 className="text-sm font-semibold mt-2 mb-1" {...props} />,
+                p: ({ node, ...props }) => <p className="text-sm leading-6 my-2" {...props} />,
+                ul: ({ node, ...props }) => <ul className="my-2 list-disc pl-5 space-y-1 marker:text-primary/80" {...props} />,
+                ol: ({ node, ...props }) => <ol className="my-2 list-decimal pl-5 space-y-1 marker:text-primary/80" {...props} />,
+                li: ({ node, ...props }) => <li className="text-sm leading-6" {...props} />,
+                hr: () => <hr className="my-3 border-white/10" />,
+                blockquote: ({ node, ...props }) => (
+                  <blockquote className="border-l-2 border-white/20 pl-3 my-2 italic text-sm text-foreground/80" {...props} />
+                ),
+                table: ({ node, ...props }) => (
+                  <div className="my-3 overflow-hidden rounded-md border border-white/10">
+                    <table className="w-full text-sm" {...props} />
+                  </div>
+                ),
+                thead: ({ node, ...props }) => <thead className="bg-white/5" {...props} />,
+                th: ({ node, ...props }) => <th className="px-3 py-2 text-left font-medium" {...props} />,
+                td: ({ node, ...props }) => <td className="px-3 py-2 align-top border-t border-white/10" {...props} />,
+                code: ({ inline, className, children, ...props }) =>
+                  inline ? (
+                    <code className="rounded bg-white/10 px-1.5 py-0.5 text-[12px]" {...props}>
+                      {children}
+                    </code>
+                  ) : (
+                    <pre className="my-2 overflow-x-auto rounded bg-black/60 p-3 text-[12px]">
+                      <code {...props}>{children}</code>
+                    </pre>
+                  ),
+              }}
+            >
+              {cleaned}
             </ReactMarkdown>
           </div>
         )}
