@@ -3,11 +3,15 @@
 import useSound from "@/store/use-sound";
 import { motion } from "framer-motion";
 import { ChevronsUpDown, ExternalLink, Minus, X } from "lucide-react";
-import ReactPlayer from "react-player";
+import dynamic from "next/dynamic";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+
+// Use client-safe dynamic import for react-player only.
+// This avoids SSR/pre-render errors while keeping behavior identical.
+const ReactPlayer = dynamic(() => import("react-player"), { ssr: false }) as unknown as (props: any) => JSX.Element;
 
 export function YoutubePlayer() {
   const { inputUrl, isYoutubeReady, isPlaying, handlePlay, handleClose } = useSound();
@@ -62,8 +66,8 @@ export function YoutubePlayer() {
             <Button className="z-10 rounded-full size-4 bg-[#28C940]" size={"icon-sm"} onClick={handleFullScreen}> <ChevronsUpDown className="size-3 -rotate-45" /> </Button>
           </div>
           <ReactPlayer
-            src={inputUrl}
-            playing={isPlaying}
+            url={inputUrl}
+            playing={!!isPlaying}
             controls
             width="100%"
             height="100%"
