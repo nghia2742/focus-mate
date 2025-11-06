@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSettings } from '@/store/use-settings';
+import { TIMER } from '@/shared/constant';
 
 export type PomodoroMode = 'focus' | 'short-break' | 'long-break';
 export type PomodoroStatus = 'idle' | 'running' | 'paused' | 'finished';
@@ -13,13 +14,6 @@ interface UsePomodoroOptions {
     longBreakInterval?: number;
 }
 
-export const TIMER = {
-    FOCUS: 25 * 60,
-    SHORT_BREAK: 5 * 60,
-    LONG_BREAK: 15 * 60,
-    LONG_BREAK_CYCLE: 4,
-};
-
 export function usePomodoro({
     focusDuration,
     shortBreakDuration,
@@ -28,9 +22,9 @@ export function usePomodoro({
 }: UsePomodoroOptions = {}) {
     const settings = useSettings();
 
-    const focusSec = (focusDuration ?? settings.focusMinutes * 60);
-    const shortSec = (shortBreakDuration ?? settings.shortBreakMinutes * 60);
-    const longSec = (longBreakDuration ?? settings.longBreakMinutes * 60);
+    const focusSec = focusDuration ?? settings.focusMinutes * 60;
+    const shortSec = shortBreakDuration ?? settings.shortBreakMinutes * 60;
+    const longSec = longBreakDuration ?? settings.longBreakMinutes * 60;
 
     const [mode, setMode] = useState<PomodoroMode>('focus');
     const [status, setStatus] = useState<PomodoroStatus>('idle');
@@ -110,11 +104,15 @@ export function usePomodoro({
         if (mode === 'focus') {
             const nextCycle = cycleCount + 1;
             setCycleCount(nextCycle);
-            const nextMode = nextCycle % longBreakInterval === 0 ? 'long-break' : 'short-break';
+            const nextMode =
+                nextCycle % longBreakInterval === 0
+                    ? 'long-break'
+                    : 'short-break';
             switchMode(nextMode, settings.autoStartNext);
         } else {
             switchMode('focus', settings.autoStartNext);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [status, mode, cycleCount, longBreakInterval, settings.autoStartNext]);
 
     return {

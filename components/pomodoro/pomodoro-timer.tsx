@@ -1,10 +1,11 @@
 "use client";
 
-import { TIMER, usePomodoro } from "@/hooks/use-pomodoro";
+import { usePomodoro } from "@/hooks/use-pomodoro";
 import { PomodoroControls } from "./pomodoro-controls";
 import { PomodoroDisplay } from "./pomodoro-display";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { TIMER } from "@/shared/constant";
 
 export function PomodoroTimer() {
     const { mode, status, timeLeft, cycleCount, start, pause, reset } = usePomodoro();
