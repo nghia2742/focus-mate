@@ -246,7 +246,7 @@ export function AIConsultant() {
 
 function ChatBubble({ role, content }: { role: "user" | "assistant"; content: string }) {
   const isUser = role === "user";
-  const cleaned = isUser ? content : content.replace(/<br\\s*\\/?\\>/gi, "\\n");
+  const cleaned = isUser ? content : content.replace(/<br\s*\/?>/gi, "\n");
   return (
     <div className={cn("flex", isUser ? "justify-end" : "justify-start")}>
       <div
