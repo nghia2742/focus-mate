@@ -11,7 +11,7 @@ export function SettingsButton() {
   return (
     <>
       <div className="fixed top-0 left-16 m-4 z-40">
-        <Button size="icon" variant="outline" onClick={() => setOpen(true)} className="rounded-full bg-white/20 backdrop-blur-md border-white/30">
+        <Button size="icon" variant="outline" onClick={() => setOpen(true)} className="bg-white/20 backdrop-blur-md border-white/30">
           <Settings className="size-4" />
         </Button>
       </div>

@@ -49,7 +49,7 @@ export function YoutubePlayer() {
   return (
     <div ref={boundsRef} className="fixed inset-0 z-40 pointer-events-none">
       <div className="fixed top-0 left-32 m-4 pointer-events-auto">
-        <Button size="icon" variant="outline" onClick={() => setOpenPicker(true)} className="rounded-full bg-white/20 backdrop-blur-md border-white/30">
+        <Button size="icon" variant="outline" onClick={() => setOpenPicker(true)} className="bg-white/20 backdrop-blur-md border-white/30">
           <Youtube className="size-4" />
         </Button>
       </div>
@@ -90,7 +90,7 @@ export function YoutubePlayer() {
                 <Button className="z-10 rounded-full size-4 bg-[#28C940]" size={"icon-sm"} onClick={handleFullScreen}> <ChevronsUpDown className="size-3 -rotate-45" /> </Button>
               </div>
               <ReactPlayer
-                url={inputUrl}
+                src={inputUrl}
                 playing={!!isPlaying}
                 controls
                 width="100%"
