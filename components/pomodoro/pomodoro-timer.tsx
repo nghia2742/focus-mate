@@ -5,21 +5,22 @@ import { PomodoroControls } from "./pomodoro-controls";
 import { PomodoroDisplay } from "./pomodoro-display";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { TIMER } from "@/shared/constant";
+import { useSettings } from "@/store/use-settings";
 
 export function PomodoroTimer() {
     const { mode, status, timeLeft, cycleCount, start, pause, reset } = usePomodoro();
+    const { focusMinutes, shortBreakMinutes, longBreakMinutes } = useSettings();
 
     const getTotalDuration = (m: string) => {
         switch (m) {
             case "focus":
-                return TIMER.FOCUS;
+                return focusMinutes * 60;
             case "short-break":
-                return TIMER.SHORT_BREAK;
+                return shortBreakMinutes * 60;
             case "long-break":
-                return TIMER.LONG_BREAK;
+                return longBreakMinutes * 60;
             default:
-                return TIMER.FOCUS;
+                return focusMinutes * 60;
         }
     };
 
