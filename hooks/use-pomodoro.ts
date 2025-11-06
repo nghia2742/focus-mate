@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import useSound from '@/store/use-sound';
 import { useSettings } from '@/store/use-settings';
 
 export type PomodoroMode = 'focus' | 'short-break' | 'long-break';
@@ -27,7 +26,6 @@ export function usePomodoro({
     longBreakDuration,
     longBreakInterval = TIMER.LONG_BREAK_CYCLE,
 }: UsePomodoroOptions = {}) {
-    const { handlePlay } = useSound();
     const settings = useSettings();
 
     const focusSec = (focusDuration ?? settings.focusMinutes * 60);
@@ -60,26 +58,21 @@ export function usePomodoro({
     const start = () => {
         if (status === 'running') return;
         setStatus('running');
-        if (mode === 'focus') handlePlay(true);
     };
 
     const pause = () => {
         setStatus('paused');
-        if (mode === 'focus') handlePlay(false);
     };
 
     const reset = () => {
         setStatus('idle');
         setTimeLeft(getDuration(mode));
-        if (mode === 'focus') handlePlay(false);
     };
 
     const switchMode = (newMode: PomodoroMode, autostart?: boolean) => {
         setMode(newMode);
         setStatus(autostart ? 'running' : 'idle');
         setTimeLeft(getDuration(newMode));
-        if (newMode === 'focus') handlePlay(autostart ? true : false);
-        else handlePlay(false);
     };
 
     // react to settings updates by resetting timeLeft if idle/paused
