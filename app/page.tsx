@@ -1,12 +1,12 @@
-import dynamic from "next/dynamic";
+"use client";
+
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { GlassBackground } from "@/components/theme/glass-background";
-
-const PomodoroTimer = dynamic(() => import("@/components/pomodoro/pomodoro-timer").then(m => m.PomodoroTimer), { ssr: false });
-const SoundscapeSelector = dynamic(() => import("@/components/sounds/sound-selector").then(m => m.SoundscapeSelector), { ssr: false });
-const YoutubePlayer = dynamic(() => import("@/components/sounds/youtube-player").then(m => m.YoutubePlayer), { ssr: false });
-const AIConsultant = dynamic(() => import("@/components/ai/ai-consultant").then(m => m.AIConsultant), { ssr: false });
-const SettingsButton = dynamic(() => import("@/components/settings/settings-button").then(m => m.SettingsButton), { ssr: false });
+import { PomodoroTimer } from "@/components/pomodoro/pomodoro-timer";
+import { SoundscapeSelector } from "@/components/sounds/sound-selector";
+import { YoutubePlayer } from "@/components/sounds/youtube-player";
+import { AIConsultant } from "@/components/ai/ai-consultant";
+import { SettingsButton } from "@/components/settings/settings-button";
 
 export default function Home() {
   return (
