@@ -1,10 +1,12 @@
-import { PomodoroTimer } from "@/components/pomodoro/pomodoro-timer";
-import { SoundscapeSelector } from "@/components/sounds/sound-selector";
-import { YoutubePlayer } from "@/components/sounds/youtube-player";
+import dynamic from "next/dynamic";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
-import { AIConsultant } from "@/components/ai/ai-consultant";
 import { GlassBackground } from "@/components/theme/glass-background";
-import { SettingsButton } from "@/components/settings/settings-button";
+
+const PomodoroTimer = dynamic(() => import("@/components/pomodoro/pomodoro-timer").then(m => m.PomodoroTimer), { ssr: false });
+const SoundscapeSelector = dynamic(() => import("@/components/sounds/sound-selector").then(m => m.SoundscapeSelector), { ssr: false });
+const YoutubePlayer = dynamic(() => import("@/components/sounds/youtube-player").then(m => m.YoutubePlayer), { ssr: false });
+const AIConsultant = dynamic(() => import("@/components/ai/ai-consultant").then(m => m.AIConsultant), { ssr: false });
+const SettingsButton = dynamic(() => import("@/components/settings/settings-button").then(m => m.SettingsButton), { ssr: false });
 
 export default function Home() {
   return (
@@ -13,7 +15,6 @@ export default function Home() {
       <ThemeToggle />
       <SoundscapeSelector />
       <PomodoroTimer />
-
       <YoutubePlayer />
       <AIConsultant />
       <SettingsButton />
