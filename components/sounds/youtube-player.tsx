@@ -4,12 +4,13 @@ import useSound from "@/store/use-sound";
 import { motion } from "framer-motion";
 import { ChevronsUpDown, ExternalLink, Minus, X } from "lucide-react";
 import dynamic from "next/dynamic";
+import type { ReactPlayerProps } from "react-player";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
-const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
+const ReactPlayer = dynamic<ReactPlayerProps>(() => import("react-player").then(m => m.default), { ssr: false });
 
 export function YoutubePlayer() {
   const { inputUrl, isYoutubeReady, isPlaying, handlePlay, handleClose } = useSound();
@@ -71,7 +72,7 @@ export function YoutubePlayer() {
             </div>
             <ReactPlayer
               url={inputUrl}
-              playing={isPlaying}
+              playing={!!isPlaying}
               controls
               width="100%"
               height="100%"
