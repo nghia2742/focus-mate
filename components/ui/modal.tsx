@@ -14,7 +14,6 @@ type ModalProps = {
 
 export function Modal({ open, onOpenChange, children, className }: ModalProps) {
   const [mounted, setMounted] = React.useState(false);
-  const containerRef = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
     setMounted(true);

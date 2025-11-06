@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { GlassBackground } from "@/components/theme/glass-background";
 import { PomodoroTimer } from "@/components/pomodoro/pomodoro-timer";
