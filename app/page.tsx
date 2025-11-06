@@ -4,6 +4,7 @@ import { YoutubePlayer } from "@/components/sounds/youtube-player";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { AIConsultant } from "@/components/ai/ai-consultant";
 import { GlassBackground } from "@/components/theme/glass-background";
+import { SettingsButton } from "@/components/settings/settings-button";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
 
       <YoutubePlayer />
       <AIConsultant />
+      <SettingsButton />
     </div>
   );
 }
