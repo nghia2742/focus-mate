@@ -73,6 +73,7 @@ export function AIConsultant() {
       `Focus field: ${field}.`,
       lastUsers ? `Recent user intents:\n${lastUsers}` : "",
       lastAssistant ? `Your recent advice (truncated):\n${lastAssistant}` : "",
+      "Do not use tables in your response. Present structured information as concise bullet lists with short headings or 'Label: detail' lines. Keep layout mobile-friendly and readable.",
       "When responding, consider the recent intents and avoid repeating prior advice. If a plan already exists, build on it with next steps or deeper guidance.",
     ]
       .filter(Boolean)
