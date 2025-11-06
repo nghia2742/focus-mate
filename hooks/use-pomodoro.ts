@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import useSound from '@/store/use-sound';
+import { useSettings } from '@/store/use-settings';
+import { TIMER } from '@/shared/constant';
 
 export type PomodoroMode = 'focus' | 'short-break' | 'long-break';
 export type PomodoroStatus = 'idle' | 'running' | 'paused' | 'finished';
@@ -13,24 +14,21 @@ interface UsePomodoroOptions {
     longBreakInterval?: number;
 }
 
-export const TIMER = {
-    FOCUS: 25 * 60,
-    SHORT_BREAK: 5 * 60,
-    LONG_BREAK: 15 * 60,
-    LONG_BREAK_CYCLE: 4,
-};
-
 export function usePomodoro({
-    focusDuration = TIMER.FOCUS,
-    shortBreakDuration = TIMER.SHORT_BREAK,
-    longBreakDuration = TIMER.LONG_BREAK,
+    focusDuration,
+    shortBreakDuration,
+    longBreakDuration,
     longBreakInterval = TIMER.LONG_BREAK_CYCLE,
 }: UsePomodoroOptions = {}) {
-    const [mode, setMode] = useState<PomodoroMode>('focus');
-    const { handlePlay } = useSound();
+    const settings = useSettings();
 
+    const focusSec = focusDuration ?? settings.focusMinutes * 60;
+    const shortSec = shortBreakDuration ?? settings.shortBreakMinutes * 60;
+    const longSec = longBreakDuration ?? settings.longBreakMinutes * 60;
+
+    const [mode, setMode] = useState<PomodoroMode>('focus');
     const [status, setStatus] = useState<PomodoroStatus>('idle');
-    const [timeLeft, setTimeLeft] = useState(focusDuration);
+    const [timeLeft, setTimeLeft] = useState(focusSec);
     const [cycleCount, setCycleCount] = useState(0);
 
     const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -39,41 +37,45 @@ export function usePomodoro({
         (newMode: PomodoroMode) => {
             switch (newMode) {
                 case 'focus':
-                    return focusDuration;
+                    return focusSec;
                 case 'short-break':
-                    return shortBreakDuration;
+                    return shortSec;
                 case 'long-break':
-                    return longBreakDuration;
+                    return longSec;
                 default:
-                    return focusDuration;
+                    return focusSec;
             }
         },
-        [focusDuration, shortBreakDuration, longBreakDuration]
+        [focusSec, shortSec, longSec]
     );
 
     const start = () => {
         if (status === 'running') return;
         setStatus('running');
-        if (mode === 'focus') handlePlay(true);
     };
 
     const pause = () => {
         setStatus('paused');
-        if (mode === 'focus') handlePlay(false);
     };
 
     const reset = () => {
         setStatus('idle');
         setTimeLeft(getDuration(mode));
-        if (mode === 'focus') handlePlay(false);
     };
 
-    const switchMode = (newMode: PomodoroMode) => {
+    const switchMode = (newMode: PomodoroMode, autostart?: boolean) => {
         setMode(newMode);
-        setStatus('idle');
+        setStatus(autostart ? 'running' : 'idle');
         setTimeLeft(getDuration(newMode));
-        if (mode === 'focus') handlePlay(false);
     };
+
+    // react to settings updates by resetting timeLeft if idle/paused
+    useEffect(() => {
+        if (status !== 'running') {
+            setTimeLeft(getDuration(mode));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [focusSec, shortSec, longSec, mode]);
 
     // countdown logic
     useEffect(() => {
@@ -95,22 +97,23 @@ export function usePomodoro({
     useEffect(() => {
         if (status !== 'finished') return;
 
-        // play sound
+        // play bell
         const audio = new Audio('/sounds/bell.mp3');
         audio.play();
 
         if (mode === 'focus') {
             const nextCycle = cycleCount + 1;
             setCycleCount(nextCycle);
-            if (nextCycle % longBreakInterval === 0) {
-                switchMode('long-break');
-            } else {
-                switchMode('short-break');
-            }
+            const nextMode =
+                nextCycle % longBreakInterval === 0
+                    ? 'long-break'
+                    : 'short-break';
+            switchMode(nextMode, settings.autoStartNext);
         } else {
-            switchMode('focus');
+            switchMode('focus', settings.autoStartNext);
         }
-    }, [status]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [status, mode, cycleCount, longBreakInterval, settings.autoStartNext]);
 
     return {
         mode,
