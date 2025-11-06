@@ -283,16 +283,21 @@ function ChatBubble({ role, content }: { role: "user" | "assistant"; content: st
                 thead: ({ node, ...props }) => <thead className="bg-white/5" {...props} />,
                 th: ({ node, ...props }) => <th className="px-3 py-2 text-left font-medium" {...props} />,
                 td: ({ node, ...props }) => <td className="px-3 py-2 align-top border-t border-white/10" {...props} />,
-                code: ({ inline, className, children, ...props }) =>
-                  inline ? (
-                    <code className="rounded bg-white/10 px-1.5 py-0.5 text-[12px]" {...props}>
+                code: (props) => {
+                  const anyProps = props as unknown as { inline?: boolean; className?: string; children?: React.ReactNode };
+                  const isInline = Boolean(anyProps.inline);
+                  const children = anyProps.children;
+                  const rest = props as React.HTMLAttributes<HTMLElement>;
+                  return isInline ? (
+                    <code className="rounded bg-white/10 px-1.5 py-0.5 text-[12px]" {...rest}>
                       {children}
                     </code>
                   ) : (
                     <pre className="my-2 overflow-x-auto rounded bg-black/60 p-3 text-[12px]">
-                      <code {...props}>{children}</code>
+                      <code {...rest}>{children}</code>
                     </pre>
-                  ),
+                  );
+                },
               }}
             >
               {cleaned}
