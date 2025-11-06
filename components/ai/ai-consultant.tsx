@@ -172,7 +172,7 @@ export function AIConsultant() {
             </div>
               </div>
 
-              <div className="relative flex-1 overflow-y-auto overscroll-contain p-3 space-y-3 [scrollbar-width:thin] [scrollbar-color:theme(colors.primary)_transparent]">
+              <div className="relative flex-1 overflow-y-auto overscroll-contain p-3 space-y-3">
                 {visibleMessages.length === 0 && (
                   <div className="text-xs text-muted-foreground">
                     Ask anything about focus fields like productivity, time management, deep work, habits, wellness, or learning.
