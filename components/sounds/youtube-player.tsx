@@ -9,21 +9,10 @@ import { toast } from "sonner";
 import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
-type ReactPlayerLikeProps = {
-  url?: string;
-  playing?: boolean;
-  controls?: boolean;
-  width?: string | number;
-  height?: string | number;
-  style?: React.CSSProperties;
-  onPlay?: () => void;
-  onError?: () => void;
-};
-
-const ReactPlayer = dynamic<ReactPlayerLikeProps>(
-  () => import("react-player").then((m) => m.default as unknown as React.ComponentType<ReactPlayerLikeProps>),
+const ReactPlayer = dynamic(
+  () => import("react-player").then((m) => m.default),
   { ssr: false }
-);
+) as unknown as (props: any) => JSX.Element;
 
 export function YoutubePlayer() {
   const { inputUrl, isYoutubeReady, isPlaying, handlePlay, handleClose } = useSound();
