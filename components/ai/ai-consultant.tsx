@@ -262,7 +262,7 @@ function ChatBubble({ role, content }: { role: "user" | "assistant"; content: st
         {isUser ? (
           <div className="whitespace-pre-wrap break-words text-sm">{cleaned}</div>
         ) : (
-          <div className="prose prose-invert max-w-none">
+          <div className="prose prose-invert max-w-none px-4">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
