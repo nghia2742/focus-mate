@@ -1,21 +1,21 @@
 "use client";
 
+import { Modal } from "@/components/ui/modal";
+import { cn } from "@/lib/utils";
 import useSound from "@/store/use-sound";
 import { motion } from "framer-motion";
-import { ChevronsUpDown, ExternalLink, Minus, X, Youtube } from "lucide-react";
+import { ChevronsUpDown, ExternalLink, Minus, X } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
+import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { toast } from "sonner";
-import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
-import { Modal } from "@/components/ui/modal";
 
 export function YoutubePlayer() {
   const { inputUrl, isYoutubeReady, isPlaying, handlePlay, handleClose, handleApply } = useSound();
   const [isMinimized, setIsMinimized] = useState(false);
   const [openPicker, setOpenPicker] = useState(false);
-  const [urlInput, setUrlInput] = useState(inputUrl || "");
   const playerRef = useRef<HTMLDivElement>(null);
   const boundsRef = useRef<HTMLDivElement>(null);
 
@@ -50,14 +50,13 @@ export function YoutubePlayer() {
     <div ref={boundsRef} className="fixed inset-0 z-40 pointer-events-none">
       <div className="fixed top-28 left-0 mx-4 pointer-events-auto">
         <Button size="icon" variant="outline" onClick={() => setOpenPicker(true)} className="bg-white/20 backdrop-blur-md border-white/30">
-          <Youtube className="size-4" />
+          <Youtube />
         </Button>
       </div>
 
       <Modal open={openPicker} onOpenChange={setOpenPicker}>
         <YouTubePicker
-          urlInput={urlInput}
-          setUrlInput={setUrlInput}
+          urlInput={inputUrl ?? ""}
           onApply={(u) => {
             handleApply(u);
             setOpenPicker(false);
@@ -119,12 +118,10 @@ type SearchItem = {
 
 function YouTubePicker({
   urlInput,
-  setUrlInput,
   onApply,
   onClose,
 }: {
   urlInput: string;
-  setUrlInput: (v: string) => void;
   onApply: (url: string) => void;
   onClose: () => void;
 }) {
@@ -145,8 +142,6 @@ function YouTubePicker({
         const res = await fetch(`/api/youtube/search?q=${encodeURIComponent(query)}&max=10`);
         const data = await res.json();
         setResults(Array.isArray(data.items) ? data.items : []);
-      } catch (e) {
-        // ignore
       } finally {
         setLoading(false);
       }
@@ -188,7 +183,7 @@ function YouTubePicker({
                     onClick={() => applyFromId(it.id)}
                   >
                     {it.thumbnail ? (
-                      <img src={it.thumbnail} alt="" className="w-14 h-9 rounded object-cover" />
+                      <Image src={it.thumbnail} alt="" width={56} height={36} className="w-14 h-9 rounded object-cover" />
                     ) : (
                       <div className="w-14 h-9 rounded bg-white/10" />
                     )}
@@ -225,3 +220,5 @@ function YouTubePicker({
 function isProbablyUrl(s: string) {
   return /^https?:\/\//i.test(s);
 }
+
+const Youtube = () => <svg className="lucide lucide-setting" strokeWidth="2" stroke="currentColor" fill="none" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>YouTube</title><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>

@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { ListFilter, Send } from "lucide-react";
+import { BotIcon, BrushCleaningIcon, ListFilter, Send } from "lucide-react";
 
 type Message = {
   role: "user" | "assistant" | "system";
@@ -136,16 +136,7 @@ export function AIConsultant() {
       <div className="absolute bottom-4 left-4 pointer-events-auto">
         <AnimatePresence initial={false}>
           {open ? (
-            <motion.div
-              key="panel"
-              drag
-              dragMomentum
-              dragElastic={0.12}
-              dragConstraints={boundsRef}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 24 }}
-              transition={{ duration: 0.2 }}
+            <div
               className={cn(
                 "relative w-[min(92vw,420px)] max-h-[70vh] rounded-2xl border shadow-2xl backdrop-blur-xl",
                 "flex flex-col",
@@ -167,16 +158,20 @@ export function AIConsultant() {
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
+                  <Button size="icon-sm" variant="ghost" disabled={visibleMessages.length === 0} onClick={() => setMessages([])} title="Clean this conversation">
+                    <BrushCleaningIcon />
+                  </Button>
                   <Button size="icon-sm" variant="ghost" onClick={() => setOpen(false)}>
                     ✕
                   </Button>
                 </div>
               </div>
 
-              <div className="relative flex-1 overflow-y-auto overscroll-contain p-3 space-y-3">
+              <div className="relative flex-1 overflow-y-auto overscroll-contain p-3 space-y-3 min-h-[50vh]">
                 {visibleMessages.length === 0 && (
-                  <div className="text-xs text-muted-foreground">
-                    Ask anything about focus fields like productivity, time management, deep work, habits, wellness, or learning.
+                  <div className="text-xs text-muted-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+                    <div className="flex justify-center mb-2"><BotIcon className="size-10" /></div>
+                    <p className="">Ask anything about focus fields like productivity, time management, deep work, habits, wellness, or learning.</p>
                   </div>
                 )}
                 {visibleMessages.map((m, i) => (
@@ -192,7 +187,7 @@ export function AIConsultant() {
               </div>
 
               <div className="relative p-3 border-t border-white/10 bg-gradient-to-t from-white/5 to-transparent">
-                <div className="flex items-end gap-2">
+                <div className="flex items-top gap-2">
                   <CategoryPicker field={field} setField={setField} />
                   <textarea
                     value={input}
@@ -200,8 +195,7 @@ export function AIConsultant() {
                     onKeyDown={handleKeyDown}
                     placeholder={`Ask about ${field.toLowerCase()}...`}
                     disabled={loading}
-                    rows={2}
-                    className="min-h-[44px] max-h-[120px] flex-1 resize-y bg-white/10 border border-white/20 rounded-md px-3 py-2 text-sm placeholder:text-foreground/50"
+                    className={`flex-auto resize-none bg-white/10 border border-white/20 rounded-md px-3 py-2 text-sm placeholder:text-foreground/50`}
                   />
                   <Button
                     onClick={sendMessage}
@@ -215,30 +209,13 @@ export function AIConsultant() {
                   </Button>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ) : (
-            <motion.div
-              key="button"
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 24 }}
-              drag
-              dragMomentum
-              dragElastic={0.12}
-              dragConstraints={boundsRef}
-            >
-              <Button
-                size="lg"
-                onClick={() => setOpen(true)}
-                className={cn(
-                  "shadow-lg rounded-2xl px-5 gap-2",
-                  "bg-primary text-primary-foreground hover:bg-primary/90 border border-black/10"
-                )}
-              >
-                <span aria-hidden>💬</span>
-                Ask AI Consultant
+            <div className="fixed top-40 left-0 mx-4 pointer-events-auto">
+              <Button size="icon" variant="outline" onClick={() => setOpen(true)} className="bg-white/20 backdrop-blur-md border-white/30">
+                <BotIcon className="size-4" />
               </Button>
-            </motion.div>
+            </div>
           )}
         </AnimatePresence>
       </div>
