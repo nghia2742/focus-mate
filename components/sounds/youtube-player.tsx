@@ -50,7 +50,7 @@ export function YoutubePlayer() {
     <div ref={boundsRef} className="fixed inset-0 z-40 pointer-events-none">
       <div className="fixed top-28 left-0 mx-4 pointer-events-auto">
         <Button size="icon" variant="outline" onClick={() => setOpenPicker(true)} className="bg-white/20 backdrop-blur-md border-white/30">
-          <Youtube />
+          <Youtube size="64" />
         </Button>
       </div>
 
@@ -125,7 +125,8 @@ function YouTubePicker({
   onApply: (url: string) => void;
   onClose: () => void;
 }) {
-  const [q, setQ] = useState(urlInput);
+  const defaultQuery = "Ambience - Cozy Cafe Background Sounds for Studying, Reading, Working";
+  const [q, setQ] = useState(defaultQuery);
   const [results, setResults] = useState<SearchItem[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -133,7 +134,7 @@ function YouTubePicker({
   useEffect(() => {
     const handle = setTimeout(async () => {
       const query = q.trim();
-      if (!query || isProbablyUrl(query)) {
+      if (!query) {
         setResults([]);
         return;
       }
@@ -145,7 +146,7 @@ function YouTubePicker({
       } finally {
         setLoading(false);
       }
-    }, 350);
+    }, 1000);
     return () => clearTimeout(handle);
   }, [q]);
 
@@ -157,25 +158,38 @@ function YouTubePicker({
   return (
     <div className="p-4">
       <div className="flex items-center justify-between">
-        <div className="text-sm font-semibold">YouTube Audio</div>
+        <div className="flex gap-2 justify-center">
+          <div><Youtube size="24" /></div>
+          <div className="text-sm font-semibold">YouTube</div>
+        </div>
         <Button size="icon-sm" variant="ghost" onClick={onClose}>✕</Button>
       </div>
 
       <div className="mt-3 space-y-3">
-        <Input
-          placeholder="Search YouTube or paste a link..."
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-        />
+        <div className="group relative">
+          <Input
+            placeholder="Search on YouTube..."
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            className="pr-10"
+          />
+          {q && (
+            <button
+              onClick={() => setQ("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 hover:opacity-70 transition-opacity"
+              aria-label="Clear search"
+            >
+              <X size={18} className="text-muted-foreground" />
+            </button>
+          )}
+        </div>
 
         {/* Search results */}
-        <div className="max-h-[50vh] overflow-y-auto rounded-md border border-white/10">
+        <div className="max-h-[50vh] overflow-y-auto rounded-md">
           {loading ? (
             <div className="p-3 text-xs text-muted-foreground">Searching...</div>
-          ) : results.length === 0 ? (
-            <div className="p-3 text-xs text-muted-foreground">No results (or paste a direct link above).</div>
-          ) : (
-            <ul className="divide-y divide-white/10">
+          ) : results.length === 0 ? <></> : (
+            <ul className="">
               {results.map((it) => (
                 <li key={it.id}>
                   <button
@@ -197,28 +211,18 @@ function YouTubePicker({
             </ul>
           )}
         </div>
-
-        <div className="flex justify-end gap-2">
-          <Button variant="secondary" onClick={onClose}>Cancel</Button>
-          <Button
-            onClick={() => {
-              const t = q.trim();
-              if (!t) return;
-              const finalUrl = isProbablyUrl(t) ? t : urlInput;
-              if (!finalUrl) return;
-              onApply(finalUrl);
-            }}
-          >
-            Use this
-          </Button>
-        </div>
       </div>
     </div>
   );
 }
 
-function isProbablyUrl(s: string) {
-  return /^https?:\/\//i.test(s);
-}
 
-const Youtube = () => <svg className="lucide lucide-setting" strokeWidth="2" stroke="currentColor" fill="none" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>YouTube</title><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
+type YoutubeProps = {
+  size: string;
+};
+
+const Youtube = ({ size }: YoutubeProps) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 72 72"><path fill="#ea5a47" d="M63.874 21.906a7.31 7.31 0 0 0-5.144-5.177C54.193 15.505 36 15.505 36 15.505s-18.193 0-22.73 1.224a7.31 7.31 0 0 0-5.144 5.177C6.91 26.472 6.91 36 6.91 36s0 9.528 1.216 14.095a7.31 7.31 0 0 0 5.144 5.177C17.807 56.495 36 56.495 36 56.495s18.193 0 22.73-1.223a7.31 7.31 0 0 0 5.144-5.177C65.09 45.528 65.09 36 65.09 36s0-9.528-1.216-14.094" /><path fill="#fff" d="M30.05 44.65L45.256 36L30.05 27.35Z" /><g fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2"><path d="M63.874 21.906a7.31 7.31 0 0 0-5.144-5.177C54.193 15.505 36 15.505 36 15.505s-18.193 0-22.73 1.224a7.31 7.31 0 0 0-5.144 5.177C6.91 26.472 6.91 36 6.91 36s0 9.528 1.216 14.095a7.31 7.31 0 0 0 5.144 5.177C17.807 56.495 36 56.495 36 56.495s18.193 0 22.73-1.223a7.31 7.31 0 0 0 5.144-5.177C65.09 45.528 65.09 36 65.09 36s0-9.528-1.216-14.094" /><path stroke-linecap="round" stroke-linejoin="round" d="M30.05 44.65L45.256 36L30.05 27.35Z" /></g></svg>
+);
+
+export default Youtube;
