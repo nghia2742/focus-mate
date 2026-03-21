@@ -1,30 +1,27 @@
-"use client";
-
 export function GlassBackground() {
   return (
-    <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      {/* Large soft blobs */}
-      <div className="absolute -top-40 -left-20 h-[38rem] w-[38rem] rounded-full bg-gradient-to-br from-indigo-400/20 via-fuchsia-400/20 to-cyan-400/20 blur-3xl animate-[float_18s_ease-in-out_infinite]" />
-      <div className="absolute top-1/3 -right-32 h-[30rem] w-[30rem] rounded-full bg-gradient-to-tr from-cyan-400/20 to-emerald-400/20 blur-[90px] animate-[float_22s_ease-in-out_infinite_reverse]" />
-      <div className="absolute -bottom-40 left-1/4 h-[36rem] w-[36rem] rounded-full bg-gradient-to-bl from-purple-500/20 to-pink-400/20 blur-3xl animate-[float_26s_ease-in-out_infinite]" />
+    <div className="fixed inset-0 -z-50 overflow-hidden bg-zinc-950">
+      {/* Deep Base Gradient */}
+      <div
+        className="absolute inset-0 opacity-80"
+        style={{
+          background: 'linear-gradient(to bottom, #0f0c29, #302b63, #24243e)'
+        }}
+      />
 
-      {/* Subtle vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.06),transparent_60%)]" />
+      {/* Animated Orbs/Blobs */}
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-purple-600/40 blur-[100px] animate-blob" />
+      <div className="absolute top-[20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-blue-600/40 blur-[100px] animate-blob animation-delay-2000" />
+      <div className="absolute bottom-[-20%] left-[20%] w-[50%] h-[50%] rounded-full bg-pink-600/40 blur-[100px] animate-blob animation-delay-4000" />
 
-      {/* Subtle grid */}
-      <div className="absolute inset-0 opacity-[0.06]">
-        <svg width="100%" height="100%">
-          <defs>
-            <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
-              <path d="M 32 0 L 0 0 0 32" fill="none" stroke="currentColor" strokeWidth="1" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-        </svg>
-      </div>
+      {/* Noise Texture */}
+      <div
+        className="absolute inset-0 opacity-[0.05] pointer-events-none"
+        style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }}
+      />
 
-      {/* Subtle top highlight */}
-      <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-white/40 to-transparent dark:from-white/10" />
+      {/* Vignette Overlay */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.5)_100%)] pointer-events-none" />
     </div>
   );
 }

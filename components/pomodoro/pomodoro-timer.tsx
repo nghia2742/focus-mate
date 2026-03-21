@@ -1,15 +1,71 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 import { usePomodoro } from "@/hooks/use-pomodoro";
+import { db } from "@/lib/firebase";
+import { cn } from "@/lib/utils";
+import { useFocusStore } from "@/store/use-focus-store";
+import { useSettings } from "@/store/use-settings";
+import { addDoc, collection, doc, increment, serverTimestamp, updateDoc } from "firebase/firestore";
+import { motion } from "framer-motion";
+import { Flame, Lock, Target, Unlock } from "lucide-react";
+import { useEffect } from "react";
 import { PomodoroControls } from "./pomodoro-controls";
 import { PomodoroDisplay } from "./pomodoro-display";
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-import { useSettings } from "@/store/use-settings";
 
 export function PomodoroTimer() {
     const { mode, status, timeLeft, cycleCount, start, pause, reset } = usePomodoro();
     const { focusMinutes, shortBreakMinutes, longBreakMinutes } = useSettings();
+    const { currentTask, isLockedMode, setLockedMode } = useFocusStore();
+    const { user } = useAuth();
+
+    // Sound effect for timer completion could go here - handled by hook
+
+    // Persistence Logic
+    useEffect(() => {
+        if (status === 'finished' && mode === 'focus' && user) {
+            const saveSession = async () => {
+                try {
+                    // 1. Save Session Log
+                    await addDoc(collection(db, "focusSessions"), {
+                        userId: user.uid,
+                        taskId: currentTask?.id || null,
+                        taskTitle: currentTask?.title || "Focus Session",
+                        duration: focusMinutes,
+                        completedAt: serverTimestamp(),
+                    });
+
+                    // 2. Update User Stats
+                    await updateDoc(doc(db, "users", user.uid), {
+                        totalFocusMinutes: increment(focusMinutes),
+                        monthlyFocusMinutes: increment(focusMinutes),
+                        lastFocusAt: serverTimestamp(),
+                        // Streak logic to be improved (check date diff)
+                    });
+
+                    // 3. Unlock screen if locked
+                    if (isLockedMode) {
+                        setLockedMode(false);
+                    }
+                } catch (error) {
+                    console.error("Error saving focus session:", error);
+                }
+            };
+            saveSession();
+        }
+    }, [status, mode, user, focusMinutes, currentTask, isLockedMode, setLockedMode]);
+
+    // Save session when timer finishes (logic to be improved with proper callback from hook)
+    // For now, we will add a simple effect to watch for mode changes or completion if possible.
+    // However, without modifying the hook to return 'completed' state or callback, exact syncing is hard.
+    // Let's assume we modify the hook or simply add a manual "Finish" button for now, 
+    // OR we watch timeLeft === 0.
+
+    // Better approach: Watch timeLeft. If it hits 0 and status was 'running', trigger save.
+    // But status changes to 'idle' or 'paused' when it hits 0 usually.
+
+    // Let's modify the hook later. for now, let's just show the task and lock button.
 
     const getTotalDuration = (m: string) => {
         switch (m) {
@@ -33,17 +89,42 @@ export function PomodoroTimer() {
     return (
         <div className="relative flex flex-col items-center gap-6">
             <GlassCircle percent={elapsedPercent}>
-                <div className="text-center space-y-2">
-                    <h2 className="text-xl font-semibold capitalize">{mode.replace("-", " ")}</h2>
-                    <div className="text-6xl font-extrabold">
+                <div className="text-center space-y-2 z-10">
+                    <h2 className="text-xl font-semibold capitalize text-white/80">{mode.replace("-", " ")}</h2>
+                    <div className="text-6xl font-extrabold text-white">
                         <PomodoroDisplay timeLeft={timeLeft} />
                     </div>
+                    {mode === 'focus' && currentTask && (
+                        <div className="mt-2 px-3 py-1 bg-white/10 rounded-full border border-white/20">
+                            <span className="text-sm text-blue-200 flex items-center gap-2">
+                                <Target className="h-4 w-4" />
+                                {currentTask.title}
+                            </span>
+                        </div>
+                    )}
                 </div>
             </GlassCircle>
 
-            <PomodoroControls status={status} start={start} pause={pause} reset={reset} />
+            <div className="flex flex-col items-center gap-4">
+                <PomodoroControls status={status} start={start} pause={pause} reset={reset} />
 
-            <div className="text-gray-600 dark:text-gray-300 font-bold">🔥 {cycleCount}</div>
+                <div className="flex items-center gap-4">
+                    <div className="text-white/80 font-bold flex items-center gap-2">
+                        <Flame className="h-5 w-5 text-orange-400" />
+                        {cycleCount}
+                    </div>
+
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setLockedMode(!isLockedMode)}
+                        className={cn("text-white/60 hover:text-white", isLockedMode && "text-blue-400 bg-blue-500/10")}
+                        title="Toggle Lock-in Mode"
+                    >
+                        {isLockedMode ? <Lock className="h-4 w-4" /> : <Unlock className="h-4 w-4" />}
+                    </Button>
+                </div>
+            </div>
         </div>
     );
 }
