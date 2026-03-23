@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Focus Mate',
+  title: 'App',
   description: 'A productivity app to help you focus',
 };
 
@@ -30,10 +30,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider>
-          {children}
-          <Toaster position='top-right' />
-        </ThemeProvider>
+        {/* <ThemeProvider> */}
+        {children}
+        <Toaster position='top-right' />
+        {/* </ThemeProvider> */}
         <Analytics />
       </body>
     </html>
