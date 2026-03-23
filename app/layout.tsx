@@ -1,9 +1,12 @@
+import { AppSidebar } from '@/components/app-sidebar';
+import { Background } from '@/components/background';
 import { ThemeProvider } from '@/components/theme/theme-provider';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { Toaster } from '@/components/ui/sonner';
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import { Toaster } from '@/components/ui/sonner';
-import { Analytics } from "@vercel/analytics/next"
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -28,13 +31,25 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased text-foreground`}
       >
-        {/* <ThemeProvider> */}
-        {children}
-        <Toaster position='top-right' />
-        {/* </ThemeProvider> */}
-        <Analytics />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SidebarProvider>
+            <Background />
+            <AppSidebar />
+            <main>
+              <SidebarTrigger className='glass' />
+              {children}
+            </main>
+          </SidebarProvider>
+          <Toaster position='top-right' />
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   );
