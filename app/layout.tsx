@@ -42,9 +42,9 @@ export default function RootLayout({
           <SidebarProvider>
             <Background />
             <AppSidebar />
-            <main>
-              <SidebarTrigger className='glass' />
-              {children}
+            <main className="relative w-full overflow-hidden">
+                <SidebarTrigger className='glass absolute top-0 left-0 z-50' />
+                {children}
             </main>
           </SidebarProvider>
           <Toaster position='top-right' />

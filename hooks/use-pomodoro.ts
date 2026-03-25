@@ -59,8 +59,29 @@ export function usePomodoro({
     };
 
     const reset = () => {
-        setStatus('idle');
         setTimeLeft(getDuration(mode));
+    };
+
+    const stop = () => {
+        setStatus('idle');
+        setMode('focus');
+        setCycleCount(0);
+        setTimeLeft(getDuration('focus'));
+    };
+
+    const skip = () => {
+        const isRunning = status === 'running';
+        if (mode === 'focus') {
+            const nextCycle = cycleCount + 1;
+            setCycleCount(nextCycle);
+            const nextMode =
+                nextCycle % longBreakInterval === 0
+                    ? 'long-break'
+                    : 'short-break';
+            switchMode(nextMode, isRunning);
+        } else {
+            switchMode('focus', isRunning);
+        }
     };
 
     const switchMode = (newMode: PomodoroMode, autostart?: boolean) => {
@@ -123,6 +144,8 @@ export function usePomodoro({
         start,
         pause,
         reset,
+        stop,
+        skip,
         switchMode,
     };
 }

@@ -1,9 +1,9 @@
+import { PomodoroTimer } from "@/components/pomodoro/pomodoro-timer";
+
 export default function Home() {
   return (
-    <div>
-      <div className="relative z-10 h-full w-full flex items-center justify-center text-white text-3xl font-bold">
-        Welcome to Focus Mate
-      </div>
+    <div className="flex h-screen w-full items-center justify-center p-4">
+      <PomodoroTimer />
     </div>
   );
 }
