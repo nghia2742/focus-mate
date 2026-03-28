@@ -20,9 +20,9 @@ export function PomodoroControls({ status, start, pause, reset, stop, skip }: Po
         <div className="flex items-center gap-4 justify-center">
             <Button
                 size="icon"
-                variant="ghost"
+                variant="glass"
                 onClick={stop}
-                className="w-12 h-12 rounded-full bg-white/5 border border-white/10 hover:bg-white/15 text-white/70 hover:text-white transition-all duration-300"
+                className="w-12 h-12 rounded-full transition-all duration-300"
                 title="Stop and Reset All"
             >
                 <Square className="w-5 h-5 fill-current" />
@@ -35,10 +35,10 @@ export function PomodoroControls({ status, start, pause, reset, stop, skip }: Po
                     onClick={isRunning ? pause : start}
                     className={cn(
                         "relative px-8 h-14 rounded-full font-bold text-lg transition-all duration-300",
-                        "backdrop-blur-xl border border-white/20 shadow-2xl",
+                        "backdrop-blur-xl shadow-2xl",
                         isRunning 
-                            ? "bg-white/10 hover:bg-white/20 text-white" 
-                            : "bg-white text-blue-600 hover:bg-blue-50"
+                            ? "glass border-primary/20 text-foreground" 
+                            : "bg-primary text-primary-foreground hover:opacity-90 shadow-primary/20"
                     )}
                 >
                     {isRunning ? (
@@ -58,9 +58,9 @@ export function PomodoroControls({ status, start, pause, reset, stop, skip }: Po
             <div className="flex items-center gap-2">
                 <Button
                     size="icon"
-                    variant="ghost"
+                    variant="glass"
                     onClick={skip}
-                    className="w-12 h-12 rounded-full bg-white/5 border border-white/10 hover:bg-white/15 text-white/70 hover:text-white transition-all duration-300"
+                    className="w-12 h-12 rounded-full transition-all duration-300"
                     title="Skip to Next Phase"
                 >
                     <SkipForward className="w-5 h-5 fill-current" />
@@ -68,9 +68,9 @@ export function PomodoroControls({ status, start, pause, reset, stop, skip }: Po
 
                 <Button
                     size="icon"
-                    variant="ghost"
+                    variant="glass"
                     onClick={reset}
-                    className="w-12 h-12 rounded-full bg-white/5 border border-white/10 hover:bg-white/15 text-white/70 hover:text-white transition-all duration-300"
+                    className="w-12 h-12 rounded-full transition-all duration-300"
                     title="Reset Current Phase"
                 >
                     <RotateCcw className="w-5 h-5" />

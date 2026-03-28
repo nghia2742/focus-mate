@@ -76,6 +76,11 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+
+    /* Glass variables */
+    --glass-background: rgba(255, 255, 255, 0.45);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --glass-shadow: rgba(0, 0, 0, 0.1);
 }
 
 .dark {
@@ -110,6 +115,11 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
+
+    /* Glass variables */
+    --glass-background: rgba(0, 0, 0, 0.45);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: rgba(0, 0, 0, 0.3);
 }
 
 @layer base {
@@ -153,39 +163,20 @@
 
 /* --- Glassmorphism Utilities --- */
 .glass {
-    background: rgba(255, 255, 255, 0.45);
+    background: var(--glass-background);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
-}
-
-.glass-dark {
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px 0 var(--glass-shadow);
 }
 
 .glass-panel {
-    background: rgba(255, 255, 255, 0.55);
+    background: var(--glass-background);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-xl);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-}
-
-/* Dark mode adjustments for glassmorphism */
-.dark .glass {
-    background: rgba(0, 0, 0, 0.45);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.dark .glass-panel {
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 30px var(--glass-shadow);
 }
 
 /* Hover glass effect for list items / buttons */
@@ -194,13 +185,9 @@
     border: 1px solid transparent;
 }
 .hover-glass:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--glass-background);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-.dark .hover-glass:hover {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 4px 15px var(--glass-shadow);
 }
