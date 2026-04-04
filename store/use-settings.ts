@@ -6,10 +6,12 @@ export type SettingsState = {
     shortBreakMinutes: number;
     longBreakMinutes: number;
     autoStartNext: boolean;
+    notificationsEnabled: boolean;
     setFocusMinutes: (m: number) => void;
     setShortBreakMinutes: (m: number) => void;
     setLongBreakMinutes: (m: number) => void;
     setAutoStartNext: (v: boolean) => void;
+    setNotificationsEnabled: (v: boolean) => void;
 };
 
 export const useSettings = create<SettingsState>((set) => ({
@@ -17,6 +19,7 @@ export const useSettings = create<SettingsState>((set) => ({
     shortBreakMinutes: Math.round(TIMER.SHORT_BREAK / 60),
     longBreakMinutes: Math.round(TIMER.LONG_BREAK / 60),
     autoStartNext: false,
+    notificationsEnabled: false,
     setFocusMinutes: (m) =>
         set({ focusMinutes: Math.max(1, Math.min(120, Math.round(m))) }),
     setShortBreakMinutes: (m) =>
@@ -24,4 +27,5 @@ export const useSettings = create<SettingsState>((set) => ({
     setLongBreakMinutes: (m) =>
         set({ longBreakMinutes: Math.max(1, Math.min(120, Math.round(m))) }),
     setAutoStartNext: (v) => set({ autoStartNext: v }),
+    setNotificationsEnabled: (v) => set({ notificationsEnabled: v }),
 }));

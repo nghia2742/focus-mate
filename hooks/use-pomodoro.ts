@@ -1,18 +1,14 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { useSettings } from '@/store/use-settings';
 import { TIMER } from '@/shared/constant';
+import { useSettings } from '@/store/use-settings';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { usePomodoroSounds } from './use-pomodoro-sounds';
+import { usePomodoroTitle } from './use-pomodoro-title';
+import { PomodoroMode, PomodoroStatus, UsePomodoroOptions } from './use-pomodoro-types';
 
-export type PomodoroMode = 'focus' | 'short-break' | 'long-break';
-export type PomodoroStatus = 'idle' | 'running' | 'paused' | 'finished';
-
-interface UsePomodoroOptions {
-    focusDuration?: number; // seconds
-    shortBreakDuration?: number;
-    longBreakDuration?: number;
-    longBreakInterval?: number;
-}
+// Re-export types to maintain backward compatibility
+export type { PomodoroMode, PomodoroStatus, UsePomodoroOptions };
 
 export function usePomodoro({
     focusDuration,
@@ -32,6 +28,10 @@ export function usePomodoro({
     const [cycleCount, setCycleCount] = useState(0);
 
     const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Sub-hooks for side effects
+    usePomodoroTitle(status, timeLeft, mode);
+    usePomodoroSounds(status);
 
     const getDuration = useCallback(
         (newMode: PomodoroMode) => {
@@ -70,17 +70,16 @@ export function usePomodoro({
     };
 
     const skip = () => {
-        const isRunning = status === 'running';
         if (mode === 'focus') {
             const nextCycle = cycleCount + 1;
-            setCycleCount(nextCycle);
             const nextMode =
                 nextCycle % longBreakInterval === 0
                     ? 'long-break'
                     : 'short-break';
-            switchMode(nextMode, isRunning);
+            switchMode(nextMode, false);
         } else {
-            switchMode('focus', isRunning);
+            setCycleCount((c) => c + 1);
+            switchMode('focus', false);
         }
     };
 
@@ -95,8 +94,7 @@ export function usePomodoro({
         if (status !== 'running') {
             setTimeLeft(getDuration(mode));
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [focusSec, shortSec, longSec, mode]);
+    }, [focusSec, shortSec, longSec, mode, status, getDuration]);
 
     // countdown logic
     useEffect(() => {
@@ -114,23 +112,20 @@ export function usePomodoro({
         return () => clearInterval(timerRef.current!);
     }, [status]);
 
-    // when finished
+    // Cleanup and auto-transition logic when finished
     useEffect(() => {
         if (status !== 'finished') return;
 
-        // play bell
-        const audio = new Audio('/sounds/bell.mp3');
-        audio.play();
-
+        // Transitions
         if (mode === 'focus') {
             const nextCycle = cycleCount + 1;
-            setCycleCount(nextCycle);
             const nextMode =
                 nextCycle % longBreakInterval === 0
                     ? 'long-break'
                     : 'short-break';
             switchMode(nextMode, settings.autoStartNext);
         } else {
+            setCycleCount((c) => c + 1);
             switchMode('focus', settings.autoStartNext);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'App',
+  title: 'Focus Mate',
   description: 'A productivity app to help you focus',
 };
 
