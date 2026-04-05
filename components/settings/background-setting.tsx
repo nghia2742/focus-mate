@@ -1,29 +1,21 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 
-export function BackgroundSettingClient() {
-    const [backgrounds, setBackgrounds] = useState<string[]>([])
-    const [loading, setLoading] = useState(true)
+export function BackgroundSetting() {
+    const { data: backgrounds = [], isLoading } = useQuery({
+        queryKey: ['backgrounds'],
+        queryFn: async () => {
+            const response = await fetch('/api/backgrounds')
+            if (!response.ok) throw new Error('Failed to fetch')
+            const data = await response.json()
+            return data as string[]
+        },
+        staleTime: 1000 * 60 * 60 * 24, // 24 hours (Cache-first behavior)
+        gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
+    })
 
-    useEffect(() => {
-        const fetchBackgrounds = async () => {
-            try {
-                const response = await fetch('/api/backgrounds')
-                const data = await response.json()
-                if (Array.isArray(data)) {
-                    setBackgrounds(data)
-                }
-            } catch (error) {
-                console.error("Failed to fetch backgrounds:", error)
-            } finally {
-                setLoading(false)
-            }
-        }
-        fetchBackgrounds()
-    }, [])
-
-    if (loading) {
+    if (isLoading) {
         return (
             <div className="space-y-4 py-4">
                 <h4 className="text-sm font-medium">Background Image</h4>
@@ -41,8 +33,8 @@ export function BackgroundSettingClient() {
             <h4 className="text-sm font-medium">Background Image</h4>
             <div className="grid grid-cols-4 gap-4 max-h-96 overflow-y-auto pr-2">
                 {backgrounds.map((bg) => (
-                    <div 
-                        key={bg} 
+                    <div
+                        key={bg}
                         className="cursor-pointer overflow-hidden rounded-md border-2 border-transparent hover:border-primary active:scale-95 transition-all"
                         onClick={() => {
                             localStorage.setItem('settings-background', `/backgrounds/${bg}`);

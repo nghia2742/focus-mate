@@ -10,10 +10,10 @@ export function PomodoroTimer() {
     return (
         <div className="relative flex flex-col items-center gap-8 p-12 rounded-[40px] glass-panel backdrop-blur-xs transition-all duration-500 hover:shadow-2xl">
             <div className="text-center space-y-1">
-                <h2 className="text-sm font-bold tracking-[0.3em] text-black/30 dark:text-white/30 uppercase">
+                <h2 className="text-sm font-bold tracking-[0.3em] text-black dark:text-white uppercase">
                     {mode.replace("-", " ")}
                 </h2>
-                <div className="text-black/20 dark:text-white/10 text-xs font-semibold">
+                <div className="text-black dark:text-white text-xs font-semibold">
                     Cycle #{cycleCount + 1}
                 </div>
             </div>

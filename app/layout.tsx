@@ -22,6 +22,8 @@ export const metadata: Metadata = {
   description: 'A productivity app to help you focus',
 };
 
+import { QueryProvider } from '@/components/providers/query-provider';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -32,20 +34,22 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased text-foreground`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Background />
-          <main className="relative w-full overflow-hidden">
-            {children}
-            <DockNav />
-          </main>
-          <Toaster position='top-right' />
-          <Analytics />
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Background />
+            <main className="relative w-full overflow-hidden">
+              {children}
+              <DockNav />
+            </main>
+            <Toaster position='top-right' />
+            <Analytics />
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );
