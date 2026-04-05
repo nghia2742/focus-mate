@@ -1,6 +1,4 @@
 import { SettingsDialog } from "@/components/settings-dialog"
-import { BackgroundSetting } from "@/components/settings/background-setting"
-import { ThemeSetting } from "@/components/settings/theme-setting"
 import {
     Sidebar,
     SidebarContent,
@@ -11,7 +9,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem
 } from "@/components/ui/sidebar"
-import { House, ListTodo, SquareFunction } from "lucide-react"
+import { House, ListTodo, Settings, SquareFunction } from "lucide-react"
 
 export function AppSidebar() {
     return (
@@ -49,8 +47,10 @@ export function AppSidebar() {
             <SidebarFooter>
                 <SidebarMenuItem>
                     <SettingsDialog>
-                        <ThemeSetting />
-                        <BackgroundSetting />
+                        <SidebarMenuButton className="hover-glass">
+                            <Settings />
+                            <span>Settings</span>
+                        </SidebarMenuButton>
                     </SettingsDialog>
                 </SidebarMenuItem>
             </SidebarFooter>

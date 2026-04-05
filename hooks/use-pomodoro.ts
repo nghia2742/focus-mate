@@ -14,9 +14,10 @@ export function usePomodoro({
     focusDuration,
     shortBreakDuration,
     longBreakDuration,
-    longBreakInterval = TIMER.LONG_BREAK_CYCLE,
+    longBreakInterval: longBreakIntervalOption,
 }: UsePomodoroOptions = {}) {
     const settings = useSettings();
+    const longBreakInterval = longBreakIntervalOption ?? settings.longBreakInterval;
 
     const focusSec = focusDuration ?? settings.focusMinutes * 60;
     const shortSec = shortBreakDuration ?? settings.shortBreakMinutes * 60;

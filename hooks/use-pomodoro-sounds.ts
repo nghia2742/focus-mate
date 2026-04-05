@@ -2,18 +2,22 @@
 
 import { useEffect, useRef } from 'react';
 import { PomodoroStatus } from './use-pomodoro-types';
+import { useSettings } from '@/store/use-settings';
 
 /**
  * Hook to handle session completion sounds.
  */
 export function usePomodoroSounds(status: PomodoroStatus) {
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const { alarmSound } = useSettings();
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
         
-        if (!audioRef.current) {
-            audioRef.current = new Audio('/sounds/bell.mp3');
+        const soundPath = `/sounds/alarm-sounds/${alarmSound}.mp3`;
+        
+        if (!audioRef.current || audioRef.current.src !== window.location.origin + soundPath) {
+            audioRef.current = new Audio(soundPath);
         }
 
         if (status === 'finished') {
@@ -22,5 +26,5 @@ export function usePomodoroSounds(status: PomodoroStatus) {
                 console.error("Audio playback failed:", err);
             });
         }
-    }, [status]);
+    }, [status, alarmSound]);
 }

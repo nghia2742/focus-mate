@@ -1,7 +1,6 @@
-import { AppSidebar } from '@/components/app-sidebar';
 import { Background } from '@/components/background';
+import { DockNav } from '@/components/dock-nav';
 import { ThemeProvider } from '@/components/theme/theme-provider';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/sonner';
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from 'next';
@@ -39,14 +38,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SidebarProvider>
-            <Background />
-            <AppSidebar />
-            <main className="relative w-full overflow-hidden">
-                <SidebarTrigger className='glass absolute top-0 left-0 z-50' />
-                {children}
-            </main>
-          </SidebarProvider>
+          <Background />
+          <main className="relative w-full overflow-hidden">
+            {children}
+            <DockNav />
+          </main>
           <Toaster position='top-right' />
           <Analytics />
         </ThemeProvider>
