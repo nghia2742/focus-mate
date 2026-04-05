@@ -90,9 +90,9 @@ export function usePomodoro({
         setTimeLeft(getDuration(newMode));
     };
 
-    // react to settings updates by resetting timeLeft if idle/paused
+    // react to settings updates by resetting timeLeft if idle
     useEffect(() => {
-        if (status !== 'running') {
+        if (status === 'idle') {
             setTimeLeft(getDuration(mode));
         }
     }, [focusSec, shortSec, longSec, mode, status, getDuration]);
