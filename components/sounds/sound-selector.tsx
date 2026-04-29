@@ -49,58 +49,56 @@ export function SoundSelector() {
   }, [volume]);
 
   return (
-    <div className="fixed top-28 left-4 z-40 pointer-events-auto">
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button size="icon" variant="outline" className="bg-white/20 backdrop-blur-md border-white/30 text-white rounded-full size-12 shadow-lg">
-            <Music className="size-5" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent side="right" className="w-64 p-4 ml-4 glass backdrop-blur-xl border-white/20 bg-black/40 text-white">
-          <h4 className="font-medium mb-4 flex items-center gap-2">
-            <Music className="size-4" />
-            Ambient Sounds
-          </h4>
-          <div className="grid grid-cols-2 gap-2 mb-6">
-            {(Object.keys(SOUNDS) as AmbientSound[]).map((key) => {
-              const sound = SOUNDS[key];
-              const isActive = activeSound === key;
-              return (
-                <Button
-                  key={key}
-                  variant={isActive ? "default" : "outline"}
-                  onClick={() => setActiveSound(key)}
-                  className={`flex gap-2 justify-start h-10 ${
-                    isActive ? "bg-primary text-primary-foreground" : "bg-white/10 hover:bg-white/20 border-white/10"
-                  }`}
-                >
-                  {sound.icon}
-                  <span className="text-sm">{sound.name}</span>
-                </Button>
-              );
-            })}
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button size="icon" variant="outline" className="bg-white/20 backdrop-blur-md border-white/30 text-white rounded-full size-12 shadow-lg">
+          <Music className="size-5" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent side="right" className="w-64 p-4 ml-4 glass backdrop-blur-xl border-white/20 bg-black/40 text-white">
+        <h4 className="font-medium mb-4 flex items-center gap-2">
+          <Music className="size-4" />
+          Ambient Sounds
+        </h4>
+        <div className="grid grid-cols-2 gap-2 mb-6">
+          {(Object.keys(SOUNDS) as AmbientSound[]).map((key) => {
+            const sound = SOUNDS[key];
+            const isActive = activeSound === key;
+            return (
+              <Button
+                key={key}
+                variant={isActive ? "default" : "outline"}
+                onClick={() => setActiveSound(key)}
+                className={`flex gap-2 justify-start h-10 ${
+                  isActive ? "bg-primary text-primary-foreground" : "bg-white/10 hover:bg-white/20 border-white/10"
+                }`}
+              >
+                {sound.icon}
+                <span className="text-sm">{sound.name}</span>
+              </Button>
+            );
+          })}
+        </div>
+        
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-sm flex items-center gap-2">
+              <Volume2 className="size-4" />
+              Volume
+            </span>
+            <span className="text-xs text-white/70">{volume[0]}%</span>
           </div>
-          
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm flex items-center gap-2">
-                <Volume2 className="size-4" />
-                Volume
-              </span>
-              <span className="text-xs text-white/70">{volume[0]}%</span>
-            </div>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              step="1"
-              value={volume[0]}
-              onChange={(e) => setVolume([parseInt(e.target.value)])}
-              className="w-full accent-primary h-2 bg-white/20 rounded-lg appearance-none cursor-pointer"
-            />
-          </div>
-        </PopoverContent>
-      </Popover>
-    </div>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            value={volume[0]}
+            onChange={(e) => setVolume([parseInt(e.target.value)])}
+            className="w-full accent-primary h-2 bg-white/20 rounded-lg appearance-none cursor-pointer"
+          />
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }
