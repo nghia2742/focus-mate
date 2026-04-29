@@ -2,12 +2,12 @@ declare module '*.css';
 
 declare module '@pqina/flip' {
   export interface TickInstance {
-    value: any;
+    value: unknown;
     destroy(): void;
   }
 
   export interface Counter {
-    onupdate: (value: any) => void;
+    onupdate: (value: unknown) => void;
     timer: {
       stop(): void;
     };
@@ -18,7 +18,7 @@ declare module '@pqina/flip' {
     create(
       element: HTMLElement | null,
       options?: {
-        value?: any;
+        value?: unknown;
         didInit?: (tick: TickInstance) => void;
       }
     ): TickInstance;
@@ -27,7 +27,7 @@ declare module '@pqina/flip' {
 
   export interface TickHelper {
     duration(value: number, unit: string): number;
-    interval(callback: (value: any) => void, options?: any): any;
+    interval(callback: (value: unknown) => void, options?: unknown): unknown;
   }
 
   export interface TickCount {

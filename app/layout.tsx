@@ -1,5 +1,6 @@
 import { Background } from '@/components/background';
 import { DockNav } from '@/components/dock-nav';
+import { SoundSelector } from '@/components/sounds/sound-selector';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { Analytics } from "@vercel/analytics/next";
@@ -42,6 +43,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Background />
+            <SoundSelector />
             <main className="relative w-full overflow-hidden">
               {children}
               <DockNav />

@@ -1,6 +1,5 @@
 'use client';
 
-import { TIMER } from '@/shared/constant';
 import { useSettings } from '@/store/use-settings';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePomodoroSounds } from './use-pomodoro-sounds';

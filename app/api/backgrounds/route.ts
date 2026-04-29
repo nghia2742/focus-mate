@@ -19,9 +19,10 @@ export async function GET() {
         }
         
         return NextResponse.json(backgrounds);
-    } catch (e: any) {
+    } catch (e: unknown) {
         console.error("API [GET] /api/backgrounds - Error reading backgrounds:", e);
-        return NextResponse.json({ error: "Internal Server Error", message: e.message }, { status: 500 });
+        const message = e instanceof Error ? e.message : "Unknown error";
+        return NextResponse.json({ error: "Internal Server Error", message }, { status: 500 });
     }
 }
 

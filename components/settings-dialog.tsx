@@ -185,9 +185,11 @@ export function SettingsDialog({ children }: { children: React.ReactNode }) {
                                             variant="outline"
                                             size="icon"
                                             className="bg-white/5 border-white/10 hover:bg-white/10"
-                                            disabled={isTestingSound}
                                             onClick={() => {
-                                                if (isTestingSound) return
+                                                if (audioRef.current) {
+                                                    audioRef.current.pause()
+                                                    audioRef.current.currentTime = 0
+                                                }
 
                                                 const audio = new Audio(`/sounds/alarm-sounds/${alarmSound}.mp3`)
                                                 audioRef.current = audio
@@ -200,7 +202,9 @@ export function SettingsDialog({ children }: { children: React.ReactNode }) {
 
                                                 audio.onended = () => {
                                                     setIsTestedSound(false)
-                                                    audioRef.current = null
+                                                    if (audioRef.current === audio) {
+                                                        audioRef.current = null
+                                                    }
                                                 }
                                             }}
                                             title={isTestingSound ? "Playing..." : "Test sound"}
