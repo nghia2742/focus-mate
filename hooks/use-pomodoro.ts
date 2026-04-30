@@ -1,146 +1,87 @@
 'use client';
 
-import { useSettings } from '@/store/use-settings';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { usePomodoroSounds } from './use-pomodoro-sounds';
+import { usePomodoroStore } from '@/store/use-pomodoro-store';
+import { useCallback } from 'react';
 import { usePomodoroTitle } from './use-pomodoro-title';
-import { PomodoroMode, PomodoroStatus, UsePomodoroOptions } from './use-pomodoro-types';
+import { usePomodoroSounds } from './use-pomodoro-sounds';
+import { PomodoroMode, PomodoroStatus } from './use-pomodoro-types';
 
-// Re-export types to maintain backward compatibility
-export type { PomodoroMode, PomodoroStatus, UsePomodoroOptions };
+export function usePomodoro() {
+    const store = usePomodoroStore();
 
-export function usePomodoro({
-    focusDuration,
-    shortBreakDuration,
-    longBreakDuration,
-    longBreakInterval: longBreakIntervalOption,
-}: UsePomodoroOptions = {}) {
-    const settings = useSettings();
-    const longBreakInterval = longBreakIntervalOption ?? settings.longBreakInterval;
-
-    const focusSec = focusDuration ?? settings.focusMinutes * 60;
-    const shortSec = shortBreakDuration ?? settings.shortBreakMinutes * 60;
-    const longSec = longBreakDuration ?? settings.longBreakMinutes * 60;
-
-    const [mode, setMode] = useState<PomodoroMode>('focus');
-    const [status, setStatus] = useState<PomodoroStatus>('idle');
-    const [timeLeft, setTimeLeft] = useState(focusSec);
-    const [cycleCount, setCycleCount] = useState(0);
-
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-    // Sub-hooks for side effects
-    usePomodoroTitle(status, timeLeft, mode);
-    usePomodoroSounds(status);
+    // Side effects for title and sounds
+    usePomodoroTitle(store.status, store.timeLeft, store.mode);
+    usePomodoroSounds(store.status);
 
     const getDuration = useCallback(
         (newMode: PomodoroMode) => {
             switch (newMode) {
                 case 'focus':
-                    return focusSec;
+                    return store.focusMinutes * 60;
                 case 'short-break':
-                    return shortSec;
+                    return store.shortBreakMinutes * 60;
                 case 'long-break':
-                    return longSec;
+                    return store.longBreakMinutes * 60;
                 default:
-                    return focusSec;
+                    return store.focusMinutes * 60;
             }
         },
-        [focusSec, shortSec, longSec]
+        [store.focusMinutes, store.shortBreakMinutes, store.longBreakMinutes]
     );
 
     const start = () => {
-        if (status === 'running') return;
-        setStatus('running');
+        if (store.status === 'running') return;
+        store.setStatus('running');
     };
 
     const pause = () => {
-        setStatus('paused');
+        store.setStatus('paused');
     };
 
     const reset = () => {
-        setTimeLeft(getDuration(mode));
+        store.setTimeLeft(getDuration(store.mode));
     };
 
     const stop = () => {
-        setStatus('idle');
-        setMode('focus');
-        setCycleCount(0);
-        setTimeLeft(getDuration('focus'));
+        store.setStatus('idle');
+        store.setMode('focus');
+        store.setCycleCount(0);
+        store.setTimeLeft(getDuration('focus'));
     };
 
     const skip = () => {
-        if (mode === 'focus') {
-            const nextCycle = cycleCount + 1;
+        if (store.mode === 'focus') {
+            const nextCycle = store.cycleCount + 1;
             const nextMode =
-                nextCycle % longBreakInterval === 0
+                nextCycle % store.longBreakInterval === 0
                     ? 'long-break'
                     : 'short-break';
             switchMode(nextMode, false);
         } else {
-            setCycleCount((c) => c + 1);
+            store.setCycleCount((c) => c + 1);
             switchMode('focus', false);
         }
     };
 
     const switchMode = (newMode: PomodoroMode, autostart?: boolean) => {
-        setMode(newMode);
-        setStatus(autostart ? 'running' : 'idle');
-        setTimeLeft(getDuration(newMode));
+        store.setMode(newMode);
+        store.setStatus(autostart ? 'running' : 'idle');
+        store.setTimeLeft(getDuration(newMode));
     };
 
-    // react to settings updates by resetting timeLeft if idle
-    useEffect(() => {
-        if (status === 'idle') {
-            setTimeLeft(getDuration(mode));
-        }
-    }, [focusSec, shortSec, longSec, mode, status, getDuration]);
-
-    // countdown logic
-    useEffect(() => {
-        if (status !== 'running') return;
-        timerRef.current = setInterval(() => {
-            setTimeLeft((t) => {
-                if (t <= 0) {
-                    clearInterval(timerRef.current!);
-                    setStatus('finished');
-                    return 0;
-                }
-                return t - 1;
-            });
-        }, 1000);
-        return () => clearInterval(timerRef.current!);
-    }, [status]);
-
-    // Cleanup and auto-transition logic when finished
-    useEffect(() => {
-        if (status !== 'finished') return;
-
-        // Transitions
-        if (mode === 'focus') {
-            const nextCycle = cycleCount + 1;
-            const nextMode =
-                nextCycle % longBreakInterval === 0
-                    ? 'long-break'
-                    : 'short-break';
-            switchMode(nextMode, settings.autoStartNext);
-        } else {
-            setCycleCount((c) => c + 1);
-            switchMode('focus', settings.autoStartNext);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [status, mode, cycleCount, longBreakInterval, settings.autoStartNext]);
-
     return {
-        mode,
-        status,
-        timeLeft,
-        cycleCount,
+        mode: store.mode,
+        status: store.status,
+        timeLeft: store.timeLeft,
+        cycleCount: store.cycleCount,
+        activeTodoId: store.activeTodoId,
+        activeTodoTitle: store.activeTodoTitle,
         start,
         pause,
         reset,
         stop,
         skip,
         switchMode,
+        setActiveTodo: store.setActiveTodo,
     };
 }

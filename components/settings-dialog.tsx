@@ -22,7 +22,6 @@ import { Switch } from "@/components/ui/switch"
 import { useSettings } from "@/store/use-settings"
 import { Palette, Play, RefreshCw, Settings2, Timer, Volume2 } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
-import { BackgroundSetting } from "./settings/background-setting"
 import { ThemeSetting } from "./settings/theme-setting"
 
 export function SettingsDialog({ children }: { children: React.ReactNode }) {
@@ -224,7 +223,6 @@ export function SettingsDialog({ children }: { children: React.ReactNode }) {
                         <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 text-left">
                             <h3 className="text-lg font-medium mb-4 glass-text">Preferences</h3>
                             <ThemeSetting />
-                            <BackgroundSetting />
                         </div>
                     )}
                 </div>

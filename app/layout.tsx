@@ -23,6 +23,7 @@ export const metadata: Metadata = {
 };
 
 import { QueryProvider } from '@/components/providers/query-provider';
+import { PomodoroProvider } from '@/components/providers/pomodoro-provider';
 
 export default function RootLayout({
   children,
@@ -41,13 +42,15 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Background />
+            <PomodoroProvider>
+              <Background />
 
-            <main className="relative w-full overflow-hidden">
-              {children}
-            </main>
-            <Toaster position='top-right' />
-            <Analytics />
+              <main className="relative w-full overflow-hidden">
+                {children}
+              </main>
+              <Toaster position='top-right' />
+              <Analytics />
+            </PomodoroProvider>
           </ThemeProvider>
         </QueryProvider>
       </body>

@@ -9,12 +9,14 @@ import { TodoWidget } from "./todo-widget";
 import { NotesWidget } from "./notes-widget";
 import { MusicWidget } from "./music-widget";
 import { GoalWidget } from "./goal-widget";
+import { PhotosWidget } from "./photos-widget";
 
 const DOCK_APPS: DockApp[] = [
     { id: "tasks", name: "Tasks", icon: "https://cdn.jim-nielsen.com/macos/512/meistertask-task-management-2017-03-10.png?rf=1024", tooltip: "Manage your daily focus tasks" },
     { id: "notes", name: "Notes", icon: "https://cdn.jim-nielsen.com/macos/1024/notes-2021-05-25.png?rf=1024", tooltip: "Quick scratchpad for your ideas" },
     { id: "music", name: "Music", icon: "https://cdn.jim-nielsen.com/macos/512/music-2025-11-13.png?rf=1024", tooltip: "Ambient sounds for deep work" },
     { id: "goal", name: "Goal", icon: "https://cdn.jim-nielsen.com/macos/512/rocketsim-for-xcode-simulator-2025-11-17.png?rf=1024", tooltip: "Track your daily focus progress" },
+    { id: "photos", name: "Photos", icon: "https://cdn.jim-nielsen.com/macos/1024/photos-2025-11-14.png?rf=1024", tooltip: "Change your background image" },
     { id: "settings", name: "Settings", icon: "https://cdn.jim-nielsen.com/macos/512/system-settings-2025-11-14.png?rf=1024", tooltip: "Customize your focus experience" },
 ];
 
@@ -32,6 +34,7 @@ export function MiniAppDock({ className }: { className?: string }) {
             case "notes": return <NotesWidget />;
             case "music": return <MusicWidget />;
             case "goal": return <GoalWidget />;
+            case "photos": return <PhotosWidget />;
             case "settings": return <SettingsPanels />;
             default: return null;
         }
@@ -43,7 +46,8 @@ export function MiniAppDock({ className }: { className?: string }) {
             case "notes": return "sm:max-w-xl h-[560px]";
             case "music": return "sm:max-w-md h-[520px]";
             case "goal": return "sm:max-w-sm h-[540px]";
-            case "settings": return "sm:max-w-[1100px] h-[720px]";
+            case "photos": return "sm:max-w-3xl h-[620px]";
+            case "settings": return "sm:max-w-2xl h-[720px]";
             default: return "sm:max-w-md";
         }
     };
