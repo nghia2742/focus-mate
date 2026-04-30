@@ -79,21 +79,27 @@
 
     /* ── Glassmorphism system ── */
     /* Adaptive opacity so text is always readable over any custom background */
-    --glass-bg: rgba(255, 255, 255, 0.55);
-    --glass-bg-heavy: rgba(255, 255, 255, 0.78);
-    --glass-bg-subtle: rgba(255, 255, 255, 0.28);
-    --glass-border: rgba(255, 255, 255, 0.65);
-    --glass-border-subtle: rgba(255, 255, 255, 0.30);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
-    --glass-shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.18), 0 4px 16px rgba(0, 0, 0, 0.12);
+    --glass-bg: rgba(255, 255, 255, 0.65);
+    --glass-bg-heavy: rgba(255, 255, 255, 0.85);
+    --glass-bg-subtle: rgba(255, 255, 255, 0.35);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-border-subtle: rgba(0, 0, 0, 0.04);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+    --glass-shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08);
     --glass-blur: 20px;
     --glass-blur-heavy: 36px;
+
+    /* Internal elements within glass panels */
+    --inner-glass-border: rgba(0, 0, 0, 0.08);
+    --inner-glass-bg: rgba(0, 0, 0, 0.04);
+    --inner-glass-bg-hover: rgba(0, 0, 0, 0.08);
+
     /* Guaranteed-contrast text tokens for glass surfaces */
-    --glass-text: rgba(8, 8, 18, 0.92);
-    --glass-text-muted: rgba(8, 8, 18, 0.56);
-    --glass-text-faint: rgba(8, 8, 18, 0.32);
+    --glass-text: rgba(15, 15, 35, 0.92);
+    --glass-text-muted: rgba(15, 15, 35, 0.62);
+    --glass-text-faint: rgba(15, 15, 35, 0.38);
     /* macOS-style window titlebar */
-    --window-titlebar-bg: rgba(235, 235, 245, 0.72);
+    --window-titlebar-bg: rgba(245, 245, 250, 0.82);
     --window-control-close: #ff5f57;
     --window-control-minimize: #febc2e;
     --window-control-maximize: #28c840;
@@ -133,21 +139,27 @@
     --sidebar-ring: oklch(0.556 0 0);
 
     /* ── Glassmorphism system – dark mode ── */
-    --glass-bg: rgba(12, 12, 22, 0.60);
-    --glass-bg-heavy: rgba(8, 8, 18, 0.82);
+    --glass-bg: rgba(12, 12, 22, 0.65);
+    --glass-bg-heavy: rgba(8, 8, 18, 0.85);
     --glass-bg-subtle: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.13);
+    --glass-border: rgba(255, 255, 255, 0.12);
     --glass-border-subtle: rgba(255, 255, 255, 0.06);
     --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.28);
     --glass-shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.60), 0 4px 16px rgba(0, 0, 0, 0.40);
     --glass-blur: 20px;
     --glass-blur-heavy: 36px;
+
+    /* Internal elements within glass panels - dark mode */
+    --inner-glass-border: rgba(255, 255, 255, 0.10);
+    --inner-glass-bg: rgba(255, 255, 255, 0.05);
+    --inner-glass-bg-hover: rgba(255, 255, 255, 0.10);
+
     /* Guaranteed-contrast text tokens for dark glass surfaces */
-    --glass-text: rgba(238, 238, 255, 0.93);
-    --glass-text-muted: rgba(238, 238, 255, 0.56);
-    --glass-text-faint: rgba(238, 238, 255, 0.30);
+    --glass-text: rgba(240, 240, 255, 0.95);
+    --glass-text-muted: rgba(240, 240, 255, 0.65);
+    --glass-text-faint: rgba(240, 240, 255, 0.35);
     /* macOS-style window titlebar – dark */
-    --window-titlebar-bg: rgba(18, 18, 30, 0.75);
+    --window-titlebar-bg: rgba(18, 18, 30, 0.78);
     --window-control-close: #ff5f57;
     --window-control-minimize: #febc2e;
     --window-control-maximize: #28c840;
@@ -276,6 +288,17 @@
     color: var(--glass-text-faint);
 }
 
+/* ── Inner elements (sub-borders and sub-backgrounds) ── */
+.inner-glass-border {
+    border-color: var(--inner-glass-border);
+}
+.inner-glass-bg {
+    background-color: var(--inner-glass-bg);
+}
+.inner-glass-bg-hover:hover {
+    background-color: var(--inner-glass-bg-hover);
+}
+
 /* ── macOS-style app window chrome ── */
 .window-chrome {
     background: var(--window-titlebar-bg);
@@ -372,4 +395,31 @@
     .dark *::-webkit-scrollbar-thumb:hover {
         background: rgba(255, 255, 255, 0.2);
     }
+}
+
+/* ════════════════════════════════════════════════
+   Tick Flip Countdown Custom Styling
+   ════════════════════════════════════════════════ */
+
+.tick {
+    font-family: inherit !important;
+    font-weight: 700 !important;
+}
+
+/* Base Panel Styling - Light Mode */
+.tick .tick-flip-panel-front,
+.tick .tick-flip-panel-back,
+.tick .tick-flip-panel {
+    background-color: #ffffff !important;
+    color: #1a1a2e !important;
+    border-color: #ffffff !important;
+}
+
+/* Dark Mode Overrides */
+.dark .tick .tick-flip-panel-front,
+.dark .tick .tick-flip-panel-back,
+.dark .tick .tick-flip-panel {
+    background-color: #1a1a1a !important;
+    border-color: #1a1a1a !important;
+    color: #ffffff !important;
 }

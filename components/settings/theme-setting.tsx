@@ -14,7 +14,7 @@ export function ThemeSetting() {
     }, []);
 
     if (!mounted) {
-        return <div className="h-[52px] w-full bg-white/5 animate-pulse rounded-xl" />;
+        return <div className="h-[52px] w-full inner-glass-bg animate-pulse rounded-xl" />;
     }
 
     const options = [
@@ -35,8 +35,8 @@ export function ThemeSetting() {
                         className={cn(
                             "flex-1 flex items-center justify-center gap-3 py-3 rounded-xl transition-all border",
                             active 
-                                ? "bg-white/10 border-white text-white shadow-lg" 
-                                : "bg-white/5 border-transparent text-white/40 hover:bg-white/[0.08] hover:text-white/60"
+                                ? "bg-primary/10 border-primary text-primary shadow-lg" 
+                                : "inner-glass-bg inner-glass-border text-glass-text-muted hover:inner-glass-bg-hover hover:glass-text"
                         )}
                     >
                         <Icon className="size-4" />

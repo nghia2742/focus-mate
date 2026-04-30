@@ -21,7 +21,7 @@ export function BackgroundSetting() {
                 <h4 className="text-sm font-medium">Background Image</h4>
                 <div className="grid grid-cols-4 gap-4 animate-pulse">
                     {[1, 2, 3, 4].map((i) => (
-                        <div key={i} className="aspect-video bg-white/5 rounded-md" />
+                        <div key={i} className="aspect-video inner-glass-bg rounded-md" />
                     ))}
                 </div>
             </div>
@@ -33,7 +33,7 @@ export function BackgroundSetting() {
             {backgrounds.map((bg) => (
                 <div
                     key={bg}
-                    className="group cursor-pointer overflow-hidden rounded-xl border-2 border-white/5 hover:border-white/20 active:scale-95 transition-all glass-subtle shadow-lg"
+                    className="group cursor-pointer overflow-hidden rounded-xl border-2 inner-glass-border hover:border-primary/50 active:scale-95 transition-all glass-subtle shadow-lg"
                     onClick={() => {
                         localStorage.setItem('settings-background', `/backgrounds/${bg}`);
                         window.dispatchEvent(new Event('background-updated'));

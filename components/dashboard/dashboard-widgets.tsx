@@ -80,7 +80,7 @@ function AmbientSection() {
                             onClick={() => setActive(key)}
                             className={cn(
                                 "flex flex-col items-center gap-1.5 p-2.5 rounded-xl transition-all text-center",
-                                isActive ? "glass border border-white/20" : "hover-glass opacity-60 hover:opacity-100"
+                                isActive ? "glass inner-glass-border" : "hover-glass opacity-60 hover:opacity-100"
                             )}
                             title={s.name}
                         >
@@ -96,7 +96,7 @@ function AmbientSection() {
                     <input
                         type="range" min="0" max="100" value={volume}
                         onChange={(e) => setVolume(Number(e.target.value))}
-                        className="flex-1 accent-violet-400 h-1.5 rounded-lg appearance-none cursor-pointer bg-white/20"
+                        className="flex-1 accent-violet-400 h-1.5 rounded-lg appearance-none cursor-pointer inner-glass-bg"
                     />
                     <span className="text-xs glass-text-faint w-8 text-right">{volume}%</span>
                 </div>
@@ -128,14 +128,14 @@ function TodoContent() {
     return (
         <div className="flex flex-col gap-3 h-full p-8 pt-10">
             <DialogHeader className="mb-4">
-                <DialogTitle className="flex items-center gap-3 text-2xl font-bold">
+                <DialogTitle className="flex items-center gap-3 text-2xl font-bold glass-text">
                     <CheckCircle2 className="size-6 text-emerald-400" />
                     Tasks
                 </DialogTitle>
             </DialogHeader>
             <div className="flex gap-2">
                 <input
-                    className="flex-1 px-4 py-2.5 rounded-xl glass glass-text text-sm placeholder:glass-text-faint focus:outline-none focus:ring-1 focus:ring-white/30"
+                    className="flex-1 px-4 py-2.5 rounded-xl glass glass-text text-sm placeholder:glass-text-faint focus:outline-none focus:ring-1 focus:ring-primary/30"
                     placeholder="Add a task…" value={input}
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={e => e.key === "Enter" && add()}
@@ -202,7 +202,7 @@ function MusicContent() {
             {/* Now playing */}
             <div className="flex items-center gap-4 p-4 glass-panel-subtle rounded-xl">
                 <div className="size-16 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 shadow-lg shrink-0 flex items-center justify-center">
-                    <Music className="size-8 text-white/70" />
+                    <Music className="size-8 text-white/50" />
                 </div>
                 <div>
                     <p className="text-lg font-bold glass-text">{tracks[current].title}</p>
@@ -239,7 +239,7 @@ function MusicContent() {
                 </button>
             </div>
 
-            <div className="border-t border-white/10 pt-6 mt-auto">
+            <div className="border-t inner-glass-border pt-6 mt-auto">
                 <AmbientSection />
             </div>
         </div>
@@ -338,7 +338,7 @@ export function MiniAppDock({ className }: { className?: string }) {
 
             <Dialog open={!!openApp} onOpenChange={(open) => !open && setOpenApp(null)}>
                 <DialogContent className={cn(
-                    "p-0 overflow-hidden glass backdrop-blur-3xl border-white/10 shadow-2xl animate-in zoom-in-95 duration-200",
+                    "p-0 overflow-hidden glass-heavy backdrop-blur-3xl shadow-2xl animate-in zoom-in-95 duration-200 border-none",
                     getDialogWidth(),
                     openApp === 'settings' && "border-none" // Settings handles its own background look
                 )}>
