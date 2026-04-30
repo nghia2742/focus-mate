@@ -1,9 +1,12 @@
 import { PomodoroTimer } from "@/components/pomodoro/pomodoro-timer";
 import { MiniAppDock } from "@/components/widgets";
+import { TopBar } from "@/components/layout/top-bar";
 
 export default function Home() {
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-8">
+      <TopBar />
+      
       {/* Timer — full attention, no competing widgets */}
       <div className="flex items-center justify-center">
         <PomodoroTimer />
