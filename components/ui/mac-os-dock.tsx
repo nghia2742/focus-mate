@@ -1,13 +1,15 @@
 "use client"
 
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { cn } from "@/lib/utils"
 import type React from "react"
 import { useCallback, useEffect, useRef, useState } from "react"
-import { cn } from "@/lib/utils"
 
 interface DockApp {
   id: string
   name: string
   icon: string
+  tooltip?: string
 }
 
 interface MacOSDockProps {
@@ -228,8 +230,8 @@ const MacOSDock: React.FC<MacOSDockProps> = ({
   const contentWidth =
     currentPositions.length > 0
       ? Math.max(
-          ...currentPositions.map((pos, index) => pos + (baseIconSize * currentScales[index]) / 2),
-        )
+        ...currentPositions.map((pos, index) => pos + (baseIconSize * currentScales[index]) / 2),
+      )
       : apps.length * (baseIconSize + baseSpacing) - baseSpacing
 
   const padding = Math.max(8, baseIconSize * 0.12)
@@ -261,54 +263,64 @@ const MacOSDock: React.FC<MacOSDockProps> = ({
           const scaledSize = baseIconSize * scale
 
           return (
-            <div
-              className="absolute cursor-pointer flex flex-col items-center justify-end"
-              key={app.id}
-              onClick={() => handleAppClick(app.id, index)}
-              onKeyDown={e => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault()
-                  handleAppClick(app.id, index)
-                }
-              }}
-              ref={el => {
-                iconRefs.current[index] = el
-              }}
-              role="button"
-              tabIndex={0}
-              style={{
-                left: `${position - scaledSize / 2}px`,
-                bottom: "0px",
-                width: `${scaledSize}px`,
-                height: `${scaledSize}px`,
-                transformOrigin: "bottom center",
-                zIndex: Math.round(scale * 10),
-              }}
-              title={app.name}
-            >
-              <img
-                alt={app.name}
-                className="object-contain"
-                height={scaledSize}
-                src={app.icon}
-                width={scaledSize}
-              />
+            <TooltipProvider key={app.id}>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <div
+                    className="absolute cursor-pointer flex flex-col items-center justify-end"
+                    onClick={() => handleAppClick(app.id, index)}
+                    onKeyDown={e => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault()
+                        handleAppClick(app.id, index)
+                      }
+                    }}
+                    ref={el => {
+                      iconRefs.current[index] = el
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    style={{
+                      left: `${position - scaledSize / 2}px`,
+                      bottom: "0px",
+                      width: `${scaledSize}px`,
+                      height: `${scaledSize}px`,
+                      transformOrigin: "bottom center",
+                      zIndex: Math.round(scale * 10),
+                    }}
+                  >
+                    <img
+                      alt={app.name}
+                      className="object-contain"
+                      height={scaledSize}
+                      src={app.icon}
+                      width={scaledSize}
+                    />
 
-              {openApps.includes(app.id) && (
-                <div
-                  className="absolute"
-                  style={{
-                    bottom: `${Math.max(-2, -baseIconSize * 0.05)}px`,
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    width: `${Math.max(3, baseIconSize * 0.06)}px`,
-                    height: `${Math.max(3, baseIconSize * 0.06)}px`,
-                    borderRadius: "50%",
-                    backgroundColor: "rgba(255, 255, 255, 0.8)",
-                  }}
-                />
-              )}
-            </div>
+                    {openApps.includes(app.id) && (
+                      <div
+                        className="absolute"
+                        style={{
+                          bottom: `${Math.max(-2, -baseIconSize * 0.05)}px`,
+                          left: "50%",
+                          transform: "translateX(-50%)",
+                          width: `${Math.max(3, baseIconSize * 0.06)}px`,
+                          height: `${Math.max(3, baseIconSize * 0.06)}px`,
+                          borderRadius: "50%",
+                          backgroundColor: "rgba(255, 255, 255, 0.8)",
+                        }}
+                      />
+                    )}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="top" className="glass border-none text-foreground font-medium px-4 py-2 rounded-xl backdrop-blur-xl">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-sm font-bold">{app.name}</span>
+                    {app.tooltip && <span className="text-[10px] opacity-70">{app.tooltip}</span>}
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           )
         })}
       </div>
