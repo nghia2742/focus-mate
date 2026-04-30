@@ -35,7 +35,7 @@ export function ThemeSetting() {
                         className={cn(
                             "flex-1 flex items-center justify-center gap-3 py-3 rounded-xl transition-all border",
                             active 
-                                ? "bg-primary/10 border-primary text-primary shadow-lg" 
+                                ? "bg-primary/10 border-primary text-primary" 
                                 : "inner-glass-bg inner-glass-border text-glass-text-muted hover:inner-glass-bg-hover hover:glass-text"
                         )}
                     >

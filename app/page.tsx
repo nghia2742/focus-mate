@@ -1,5 +1,5 @@
 import { PomodoroTimer } from "@/components/pomodoro/pomodoro-timer";
-import { MiniAppDock } from "@/components/dashboard/dashboard-widgets";
+import { MiniAppDock } from "@/components/widgets";
 
 export default function Home() {
   return (

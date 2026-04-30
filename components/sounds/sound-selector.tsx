@@ -51,7 +51,7 @@ export function SoundSelector() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button size="icon" variant="outline" className="bg-white/20 backdrop-blur-md border-white/30 text-white rounded-full size-12 shadow-lg">
+        <Button size="icon" variant="outline" className="bg-white/20 backdrop-blur-md border-white/30 text-white rounded-full size-12">
           <Music className="size-5" />
         </Button>
       </PopoverTrigger>

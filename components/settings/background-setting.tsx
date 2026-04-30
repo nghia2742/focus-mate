@@ -33,7 +33,7 @@ export function BackgroundSetting() {
             {backgrounds.map((bg) => (
                 <div
                     key={bg}
-                    className="group cursor-pointer overflow-hidden rounded-xl border-2 inner-glass-border hover:border-primary/50 active:scale-95 transition-all glass-subtle shadow-lg"
+                    className="group cursor-pointer overflow-hidden rounded-xl border-2 inner-glass-border hover:border-primary/50 active:scale-95 transition-all glass-subtle"
                     onClick={() => {
                         localStorage.setItem('settings-background', `/backgrounds/${bg}`);
                         window.dispatchEvent(new Event('background-updated'));

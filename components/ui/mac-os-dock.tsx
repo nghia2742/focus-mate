@@ -236,7 +236,7 @@ const MacOSDock: React.FC<MacOSDockProps> = ({
 
   return (
     <div
-      className={cn("glass-panel shadow-2xl", className)}
+      className={cn("glass-panel", className)}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
       ref={dockRef}
@@ -291,9 +291,6 @@ const MacOSDock: React.FC<MacOSDockProps> = ({
                 className="object-contain"
                 height={scaledSize}
                 src={app.icon}
-                style={{
-                  filter: `drop-shadow(0 ${scale > 1.2 ? Math.max(2, baseIconSize * 0.05) : Math.max(1, baseIconSize * 0.03)}px ${scale > 1.2 ? Math.max(4, baseIconSize * 0.1) : Math.max(2, baseIconSize * 0.06)}px rgba(0,0,0,${0.2 + (scale - 1) * 0.15}))`,
-                }}
                 width={scaledSize}
               />
 
@@ -308,7 +305,6 @@ const MacOSDock: React.FC<MacOSDockProps> = ({
                     height: `${Math.max(3, baseIconSize * 0.06)}px`,
                     borderRadius: "50%",
                     backgroundColor: "rgba(255, 255, 255, 0.8)",
-                    boxShadow: "0 0 4px rgba(0, 0, 0, 0.3)",
                   }}
                 />
               )}

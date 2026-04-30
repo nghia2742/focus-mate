@@ -53,7 +53,7 @@ export function SettingsDialog({ children }: { children: React.ReactNode }) {
             <DialogTrigger asChild>
                 {children}
             </DialogTrigger>
-            <DialogContent className="sm:max-w-4xl p-0 overflow-hidden glass-heavy backdrop-blur-xl flex flex-row h-[600px] max-h-[85vh] gap-0 border-none shadow-2xl">
+            <DialogContent className="sm:max-w-4xl p-0 overflow-hidden glass-heavy backdrop-blur-xl flex flex-row h-[600px] max-h-[85vh] gap-0 border-none">
                 {/* Internal Sidebar */}
                 <div className="w-64 border-r inner-glass-border inner-glass-bg flex flex-col p-4 gap-2">
                     <DialogHeader className="mb-4 text-left">
@@ -62,14 +62,14 @@ export function SettingsDialog({ children }: { children: React.ReactNode }) {
                     <div className="flex flex-col gap-1">
                         <button
                             onClick={() => setActiveTab("general")}
-                            className={`flex justify-start items-center gap-2 px-3 py-2 rounded-md transition-colors text-sm ${activeTab === 'general' ? 'bg-primary/10 text-primary font-medium shadow-sm' : 'glass-text-muted hover:inner-glass-bg-hover'}`}
+                            className={`flex justify-start items-center gap-2 px-3 py-2 rounded-md transition-colors text-sm ${activeTab === 'general' ? 'bg-primary/10 text-primary font-medium' : 'glass-text-muted hover:inner-glass-bg-hover'}`}
                         >
                             <Settings2 className="size-4" />
                             General
                         </button>
                         <button
                             onClick={() => setActiveTab("preferences")}
-                            className={`flex justify-start items-center gap-2 px-3 py-2 rounded-md transition-colors text-sm ${activeTab === 'preferences' ? 'bg-primary/10 text-primary font-medium shadow-sm' : 'glass-text-muted hover:inner-glass-bg-hover'}`}
+                            className={`flex justify-start items-center gap-2 px-3 py-2 rounded-md transition-colors text-sm ${activeTab === 'preferences' ? 'bg-primary/10 text-primary font-medium' : 'glass-text-muted hover:inner-glass-bg-hover'}`}
                         >
                             <Palette className="size-4" />
                             Preferences

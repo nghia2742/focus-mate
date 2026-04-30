@@ -11,7 +11,7 @@ export function SidebarControls() {
         <div className="fixed top-28 left-4 z-40 pointer-events-auto flex flex-col gap-4">
             <SoundSelector />
             <SettingsDialog>
-                <Button size="icon" variant="outline" className="bg-white/20 backdrop-blur-md border-white/30 text-white rounded-full size-12 shadow-lg">
+                <Button size="icon" variant="outline" className="bg-white/20 backdrop-blur-md border-white/30 text-white rounded-full size-12">
                     <Settings className="size-5" />
                 </Button>
             </SettingsDialog>

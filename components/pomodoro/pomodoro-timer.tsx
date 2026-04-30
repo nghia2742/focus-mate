@@ -8,7 +8,7 @@ export function PomodoroTimer() {
     const { mode, status, timeLeft, cycleCount, start, pause, reset, stop, skip } = usePomodoro();
 
     return (
-        <div className="relative flex flex-col items-center gap-8 p-12 rounded-[40px] glass-panel backdrop-blur-xs transition-all duration-500 hover:shadow-2xl">
+        <div className="relative flex flex-col items-center gap-8 p-12 rounded-[40px] glass-panel backdrop-blur-xs transition-all duration-500">
             <div className="text-center space-y-1">
                 <h2 className="text-sm font-bold tracking-[0.3em] text-black dark:text-white uppercase">
                     {mode.replace("-", " ")}
