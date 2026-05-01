@@ -1,16 +1,17 @@
 "use client";
 
 import { usePomodoro } from "@/hooks/use-pomodoro";
+import { Target, XCircle } from "lucide-react";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
 import { PomodoroControls } from "./pomodoro-controls";
 import { PomodoroDisplay } from "./pomodoro-display";
-import { XCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 export function PomodoroTimer() {
-    const { 
-        mode, status, timeLeft, cycleCount, 
+    const {
+        mode, status, timeLeft, cycleCount,
         start, pause, reset, stop, skip,
-        activeTodoTitle, setActiveTodo 
+        activeTodoTitle, setActiveTodo
     } = usePomodoro();
 
     return (
@@ -31,14 +32,21 @@ export function PomodoroTimer() {
 
                 {activeTodoTitle && (
                     <div className="flex items-center gap-3 px-4 py-2 rounded-full glass bg-emerald-500/10 border border-emerald-500/20 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                        <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">Focusing on:</span>
+                        {/* <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">Focusing on:</span>
                         <span className="text-xs font-medium text-white truncate max-w-[150px]">{activeTodoTitle}</span>
                         <button 
                             onClick={() => setActiveTodo(null, null)}
                             className="text-white/20 hover:text-red-400 transition-colors"
                         >
                             <XCircle className="size-4" />
-                        </button>
+                        </button> */}
+                        <Badge variant="secondary">
+                            <Target data-icon="inline-start" />
+                            {activeTodoTitle}
+                            <Button onClick={() => setActiveTodo(null, null)}>
+                                <XCircle className="size-4" />
+                            </Button>
+                        </Badge>
                     </div>
                 )}
             </div>

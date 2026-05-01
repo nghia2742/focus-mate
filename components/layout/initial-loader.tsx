@@ -41,7 +41,7 @@ export function InitialLoader() {
         >
           <AppleHelloEnglishEffect
             className="text-foreground h-24"
-            speed={0.75}
+            speed={0.4}
             onAnimationComplete={() => setIsAnimationComplete(true)}
           />
         </motion.div>

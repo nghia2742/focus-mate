@@ -1,18 +1,18 @@
 "use client";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import { useAmbient, type AmbientKey } from "@/store/use-ambient";
 import {
     CloudRain,
     Coffee,
     Flame,
-    Sliders,
     TreePine,
     Volume2,
     VolumeX,
     Waves,
-    Wind,
+    Wind
 } from "lucide-react";
 
 export const AMBIENT: Record<AmbientKey, {
@@ -24,7 +24,7 @@ export const AMBIENT: Record<AmbientKey, {
     accent: string
 }> = {
     none: { name: "None", icon: VolumeX, file: null, color: "text-slate-400", activeBg: "bg-slate-500/20", accent: "accent-slate-500" },
-    rain: { name: "Rain", icon: CloudRain, file: "/sounds/background-sounds/rain/rain_1.mp3", color: "text-sky-400", activeBg: "bg-sky-500/20", accent: "accent-sky-500" },
+    rain: { name: "Rain", icon: CloudRain, file: "/sounds/background-sounds/rain/rain.mp3", color: "text-sky-400", activeBg: "bg-sky-500/20", accent: "accent-sky-500" },
     fire: { name: "Fire", icon: Flame, file: "/sounds/background-sounds/fire/fire_1.mp3", color: "text-orange-400", activeBg: "bg-orange-500/20", accent: "accent-orange-500" },
     windy: { name: "Wind", icon: Wind, file: "/sounds/background-sounds/windy/windy_1.mp3", color: "text-teal-400", activeBg: "bg-teal-500/20", accent: "accent-teal-500" },
     waves: { name: "Waves", icon: Waves, file: "/sounds/background-sounds/waves/waves.mp3", color: "text-blue-400", activeBg: "bg-blue-500/20", accent: "accent-blue-500" },
@@ -56,10 +56,10 @@ export function AmbientSection() {
                                         </span>
                                         <span className="text-xs font-mono font-bold glass-text-muted">{volume}%</span>
                                     </div>
-                                    <input
-                                        type="range" min="0" max="100" value={volume}
-                                        onChange={(e) => setVolume(Number(e.target.value))}
-                                        className={cn("w-full h-1.5 rounded-lg appearance-none cursor-pointer inner-glass-bg transition-all", activeSound !== "none" ? AMBIENT[activeSound].accent : "accent-blue-500")}
+                                    <Slider
+                                        min={0} max={100} value={[volume]}
+                                        onValueChange={(vals) => setVolume(vals[0])}
+                                        className={cn("w-full cursor-pointer", activeSound !== "none" ? AMBIENT[activeSound].color : "text-blue-500")}
                                     />
                                 </div>
                             </PopoverContent>

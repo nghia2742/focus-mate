@@ -1,49 +1,58 @@
 "use client";
 
 import { AuthButton } from "@/components/auth/auth-button";
-import { Flame, Clock } from "lucide-react";
-import { useProfile } from "@/hooks/use-profile";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { useDailyStats } from "@/hooks/use-daily-stats";
+import { useProfile } from "@/hooks/use-profile";
+import { Clock, Flame } from "lucide-react";
 
 export function TopBar() {
-    const { data: profile } = useProfile();
     const { data: dailyStats } = useDailyStats();
-    
-    const streak = profile?.current_streak || 0;
+    const { data: profile } = useProfile();
+
     const totalToday = dailyStats?.total_minutes || 0;
+    const streak = profile?.current_streak || 0;
 
     return (
-        <div className="fixed top-0 left-0 w-full p-6 flex justify-between items-start z-50 pointer-events-none">
+        <div className="fixed top-0 left-0 w-full px-4 py-2 flex justify-between items-center z-50 border-b-0 rounded-none border-x-0 transition-colors">
             {/* Top Left: Stats */}
-            <div className="pointer-events-auto flex items-center gap-3">
+            <div className="flex items-center gap-4 glass-panel p-2 px-4">
                 {/* Streak */}
-                <div 
-                    className="glass-panel backdrop-blur-md border border-white/10 px-3 py-2 rounded-full flex items-center gap-2 shadow-lg hover:bg-white/5 transition-all cursor-pointer group"
+                <div
+                    className="flex items-center gap-2"
                     title="Current Streak"
                 >
-                    <div className="relative">
-                        <Flame className="w-5 h-5 text-orange-500 fill-orange-500/50" />
-                        <div className="absolute inset-0 bg-orange-500 blur-md opacity-20 group-hover:opacity-40 transition-opacity" />
+                    <div className="relative flex items-center justify-center w-7 h-7 rounded-full inner-glass-bg inner-glass-border">
+                        <Flame className="w-3.5 h-3.5 text-orange-500" />
                     </div>
-                    <span className="text-white font-bold text-sm">{streak}</span>
+                    <div className="flex flex-col justify-center">
+                        <span className="text-[10px] glass-text-faint font-medium uppercase tracking-wider leading-none mb-0.5">Streak</span>
+                        <span className="glass-text font-bold text-sm leading-none">{streak} <span className="glass-text-muted text-[10px] font-normal">days</span></span>
+                    </div>
                 </div>
 
+                <div className="w-px h-5 inner-glass-bg"></div>
+
                 {/* Total Focus Today */}
-                <div 
-                    className="glass-panel backdrop-blur-md border border-white/10 px-3 py-2 rounded-full flex items-center gap-2 shadow-lg hover:bg-white/5 transition-all cursor-pointer group"
+                <div
+                    className="flex items-center gap-2"
                     title="Focus minutes today"
                 >
-                    <div className="relative">
-                        <Clock className="w-5 h-5 text-emerald-400" />
-                        <div className="absolute inset-0 bg-emerald-400 blur-md opacity-20 group-hover:opacity-40 transition-opacity" />
+                    <div className="relative flex items-center justify-center w-7 h-7 rounded-full inner-glass-bg inner-glass-border">
+                        <Clock className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
                     </div>
-                    <span className="text-white font-bold text-sm">{totalToday}</span>
+                    <div className="flex flex-col justify-center">
+                        <span className="text-[10px] glass-text-faint font-medium uppercase tracking-wider leading-none mb-0.5">Focus Today</span>
+                        <span className="glass-text font-bold text-sm leading-none">{totalToday} <span className="glass-text-muted text-[10px] font-normal">min</span></span>
+                    </div>
                 </div>
             </div>
 
-            {/* Top Right: Auth */}
-            <div className="pointer-events-auto">
+            {/* Top Right: Actions & Auth */}
+            <div className="flex items-center gap-2">
                 <AuthButton />
+                <div className="w-px h-5 inner-glass-bg"></div>
+                <ThemeToggle />
             </div>
         </div>
     );

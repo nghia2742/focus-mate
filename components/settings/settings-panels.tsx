@@ -12,6 +12,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { NumberInput } from "@/components/ui/number-input";
 import { Separator } from "@/components/ui/separator";
 import { 
     Settings2, 
@@ -73,18 +74,7 @@ export function SettingsPanels() {
 
             {/* Content Area */}
             <div className="flex-1 p-8 pt-4 overflow-y-auto custom-scrollbar">
-                <div className="flex flex-col gap-10 w-full animate-in fade-in slide-in-from-bottom-2 duration-300">
-                    
-                    {/* Theme Preference */}
-                    <div>
-                        <div className="flex items-center gap-2 mb-6">
-                            <Palette className="size-5 text-primary" />
-                            <h3 className="text-lg font-bold glass-text">Theme Preference</h3>
-                        </div>
-                        <ThemeSetting />
-                    </div>
-
-                    <Separator className="inner-glass-border opacity-50" />
+                <div className="flex flex-col gap-8 w-full animate-in fade-in slide-in-from-bottom-2 duration-300">
 
                     {/* Timer Settings */}
                     <div>
@@ -95,31 +85,31 @@ export function SettingsPanels() {
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                             <div className="space-y-2">
                                 <Label htmlFor="focus-time" className="text-sm font-bold glass-text-muted">Focus Time (min)</Label>
-                                <Input
+                                <NumberInput
                                     id="focus-time"
-                                    type="number"
                                     value={focusMinutes}
-                                    onChange={(e) => setFocusMinutes(parseInt(e.target.value) || 0)}
+                                    onChange={setFocusMinutes}
+                                    min={1}
                                     className="inner-glass-bg inner-glass-border glass-text h-11"
                                 />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="short-break" className="text-sm font-bold glass-text-muted">Short Break (min)</Label>
-                                <Input
+                                <NumberInput
                                     id="short-break"
-                                    type="number"
                                     value={shortBreakMinutes}
-                                    onChange={(e) => setShortBreakMinutes(parseInt(e.target.value) || 0)}
+                                    onChange={setShortBreakMinutes}
+                                    min={1}
                                     className="inner-glass-bg inner-glass-border glass-text h-11"
                                 />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="long-break" className="text-sm font-bold glass-text-muted">Long Break (min)</Label>
-                                <Input
+                                <NumberInput
                                     id="long-break"
-                                    type="number"
                                     value={longBreakMinutes}
-                                    onChange={(e) => setLongBreakMinutes(parseInt(e.target.value) || 0)}
+                                    onChange={setLongBreakMinutes}
+                                    min={1}
                                     className="inner-glass-bg inner-glass-border glass-text h-11"
                                 />
                             </div>
@@ -150,12 +140,11 @@ export function SettingsPanels() {
                                     <Label htmlFor="long-break-interval" className="text-sm font-bold glass-text-muted">Long Break Interval</Label>
                                     <p className="text-xs glass-text-faint">Sessions before a long break.</p>
                                 </div>
-                                <Input
+                                <NumberInput
                                     id="long-break-interval"
-                                    type="number"
                                     value={longBreakInterval}
-                                    onChange={(e) => setLongBreakInterval(parseInt(e.target.value) || 1)}
-                                    className="inner-glass-bg inner-glass-border glass-text w-24 text-center h-11"
+                                    onChange={setLongBreakInterval}
+                                    className="inner-glass-bg inner-glass-border glass-text h-11 w-48"
                                     min={1}
                                     max={10}
                                 />
