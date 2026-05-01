@@ -24,6 +24,7 @@ export const metadata: Metadata = {
 
 import { QueryProvider } from '@/components/providers/query-provider';
 import { PomodoroProvider } from '@/components/providers/pomodoro-provider';
+import { InitialLoader } from '@/components/layout/initial-loader';
 
 export default function RootLayout({
   children,
@@ -44,7 +45,7 @@ export default function RootLayout({
           >
             <PomodoroProvider>
               <Background />
-
+              <InitialLoader />
               <main className="relative w-full overflow-hidden">
                 {children}
               </main>

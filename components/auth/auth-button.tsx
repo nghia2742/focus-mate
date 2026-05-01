@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -23,7 +24,7 @@ import { LogIn, LogOut, User, Settings } from "lucide-react";
 import { toast } from "sonner";
 
 export function AuthButton() {
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<SupabaseUser | null>(null);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const supabase = createClient();
@@ -53,8 +54,12 @@ export function AuthButton() {
                 },
             });
             if (error) throw error;
-        } catch (error: any) {
-            toast.error("Error signing in with Google: " + error.message);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                toast.error("Error signing in with Google: " + error.message);
+            } else {
+                toast.error("An unknown error occurred during sign in");
+            }
         }
     };
 

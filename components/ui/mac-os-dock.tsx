@@ -2,8 +2,16 @@
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
-import type React from "react"
 import { useCallback, useEffect, useRef, useState } from "react"
+import type React from "react"
+
+declare global {
+  interface Window {
+    gsap?: {
+      to: (el: HTMLElement | null, options: Record<string, unknown>) => void
+    }
+  }
+}
 
 interface DockApp {
   id: string
@@ -207,8 +215,8 @@ const MacOSDock: React.FC<MacOSDockProps> = ({
 
   const handleAppClick = (appId: string, index: number) => {
     if (iconRefs.current[index]) {
-      if (typeof window !== "undefined" && (window as any).gsap) {
-        const gsap = (window as any).gsap
+      if (typeof window !== "undefined" && window.gsap) {
+        const gsap = window.gsap
         const bounceHeight = currentScales[index] > 1.3 ? -baseIconSize * 0.2 : -baseIconSize * 0.15
 
         gsap.to(iconRefs.current[index], {
