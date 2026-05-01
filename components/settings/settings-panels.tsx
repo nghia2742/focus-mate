@@ -1,30 +1,27 @@
 "use client";
 
-import { useSettings } from "@/store/use-settings";
-import { ThemeSetting } from "./theme-setting";
-import { 
-    Select, 
-    SelectContent, 
-    SelectItem, 
-    SelectTrigger, 
-    SelectValue 
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
+import { DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { NumberInput } from "@/components/ui/number-input";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { 
-    Settings2, 
-    Volume2, 
-    Palette, 
+import { Switch } from "@/components/ui/switch";
+import { useSettings } from "@/store/use-settings";
+import {
+    Clock,
     Play,
     RefreshCw,
-    Clock
+    Settings2,
+    Volume2
 } from "lucide-react";
-import { useRef, useState, useEffect } from "react";
-import { DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { useEffect, useRef, useState } from "react";
 
 export function SettingsPanels() {
     const {
@@ -39,7 +36,7 @@ export function SettingsPanels() {
     const [isTestingSound, setIsTestedSound] = useState(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
-    useEffect(() => () => { 
+    useEffect(() => () => {
         if (audioRef.current) {
             audioRef.current.pause();
             audioRef.current = null;
@@ -160,7 +157,7 @@ export function SettingsPanels() {
                             <Volume2 className="size-5 text-primary" />
                             <h3 className="text-lg font-bold glass-text">Sound Settings</h3>
                         </div>
-                        <div className="flex items-center justify-between gap-8">
+                        <div className="flex items-center justify-between gap-8 flex-wrap">
                             <div className="space-y-1 shrink-0">
                                 <Label className="text-sm font-bold glass-text-muted">Alarm Sound</Label>
                                 <p className="text-xs glass-text-faint">Select the sound to play when a session ends.</p>
