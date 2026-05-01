@@ -76,6 +76,33 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+
+    /* ── Glassmorphism system ── */
+    /* Adaptive opacity so text is always readable over any custom background */
+    --glass-bg: rgba(255, 255, 255, 0.65);
+    --glass-bg-heavy: rgba(255, 255, 255, 0.7);
+    --glass-bg-subtle: rgba(255, 255, 255, 0.35);
+    --glass-border: rgba(0, 0, 0, 0.1);
+    --glass-border-subtle: rgba(0, 0, 0, 0.05);
+    --glass-shadow: none;
+    --glass-shadow-heavy: none;
+    --glass-blur: 20px;
+    --glass-blur-heavy: 36px;
+
+    /* Internal elements within glass panels */
+    --inner-glass-border: rgba(0, 0, 0, 0.1);
+    --inner-glass-bg: rgba(0, 0, 0, 0.06);
+    --inner-glass-bg-hover: rgba(0, 0, 0, 0.1);
+
+    /* Guaranteed-contrast text tokens for glass surfaces */
+    --glass-text: rgba(0, 0, 0, 0.95);
+    --glass-text-muted: rgba(0, 0, 0, 0.75);
+    --glass-text-faint: rgba(0, 0, 0, 0.45);
+    /* macOS-style window titlebar */
+    --window-titlebar-bg: rgba(245, 245, 250, 0.82);
+    --window-control-close: #ff5f57;
+    --window-control-minimize: #febc2e;
+    --window-control-maximize: #28c840;
 }
 
 .dark {
@@ -110,6 +137,32 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
+
+    /* ── Glassmorphism system – dark mode ── */
+    --glass-bg: rgba(0, 0, 0, 0.55);
+    --glass-bg-heavy: rgba(0, 0, 0, 0.7);
+    --glass-bg-subtle: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --glass-border-subtle: rgba(255, 255, 255, 0.08);
+    --glass-shadow: none;
+    --glass-shadow-heavy: none;
+    --glass-blur: 20px;
+    --glass-blur-heavy: 36px;
+
+    /* Internal elements within glass panels - dark mode */
+    --inner-glass-border: rgba(255, 255, 255, 0.15);
+    --inner-glass-bg: rgba(255, 255, 255, 0.08);
+    --inner-glass-bg-hover: rgba(255, 255, 255, 0.15);
+
+    /* Guaranteed-contrast text tokens for dark glass surfaces */
+    --glass-text: rgba(255, 255, 255, 0.98);
+    --glass-text-muted: rgba(255, 255, 255, 0.8);
+    --glass-text-faint: rgba(255, 255, 255, 0.45);
+    /* macOS-style window titlebar – dark */
+    --window-titlebar-bg: rgba(18, 18, 30, 0.78);
+    --window-control-close: #ff5f57;
+    --window-control-minimize: #febc2e;
+    --window-control-maximize: #28c840;
 }
 
 @layer base {
@@ -149,4 +202,232 @@
 
 .animate-slide-down {
     animation: slide-down 0.5s ease-out;
+}
+
+/* ════════════════════════════════════════════════
+   Glassmorphism Utility System
+   ════════════════════════════════════════════════ */
+
+/* ── Base glass ── */
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+}
+
+/* Lighter, more transparent glass */
+.glass-subtle {
+    background: var(--glass-bg-subtle);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border-subtle);
+    box-shadow: var(--glass-shadow);
+}
+
+/* Opaque, highly readable glass */
+.glass-heavy {
+    background: var(--glass-bg-heavy);
+    backdrop-filter: blur(var(--glass-blur-heavy));
+    -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow-heavy);
+}
+
+/* ── Panel variants (with border-radius) ── */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--glass-shadow);
+}
+
+.glass-panel-subtle {
+    background: var(--glass-bg-subtle);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border-subtle);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--glass-shadow);
+}
+
+.glass-panel-heavy {
+    background: var(--glass-bg-heavy);
+    backdrop-filter: blur(var(--glass-blur-heavy));
+    -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--glass-shadow-heavy);
+}
+
+/* ── Hover glass (for interactive list items, buttons) ── */
+.hover-glass {
+    transition: all 0.25s ease;
+    border: 1px solid transparent;
+}
+.hover-glass:hover {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+}
+
+/* ── Text utilities for glass surfaces ── */
+/* Use these INSTEAD of text-white/80 etc., they adapt to light/dark */
+.glass-text {
+    color: var(--glass-text);
+}
+.glass-text-muted {
+    color: var(--glass-text-muted);
+}
+.glass-text-faint {
+    color: var(--glass-text-faint);
+}
+
+/* ── Inner elements (sub-borders and sub-backgrounds) ── */
+.inner-glass-border {
+    border-color: var(--inner-glass-border);
+}
+.inner-glass-bg {
+    background-color: var(--inner-glass-bg);
+}
+.inner-glass-bg-hover:hover {
+    background-color: var(--inner-glass-bg-hover);
+}
+
+/* ── macOS-style app window chrome ── */
+.window-chrome {
+    background: var(--window-titlebar-bg);
+    backdrop-filter: blur(var(--glass-blur-heavy));
+    -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.window-control {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.window-control:hover {
+    opacity: 0.85;
+    transform: scale(1.1);
+}
+.window-control-close  { background: var(--window-control-close); }
+.window-control-min    { background: var(--window-control-minimize); }
+.window-control-max    { background: var(--window-control-maximize); }
+
+/* ── Mini-app icon (dock item) ── */
+.mini-app-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+}
+.mini-app-icon:hover {
+    transform: translateY(-4px) scale(1.08);
+}
+.mini-app-icon:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+/* ── Window animations (opacity + scale only, no translate) ── */
+@keyframes window-open {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes window-close {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+}
+
+
+/* ── Custom Scrollbar System ── */
+@layer base {
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    }
+
+    *::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        transition: background 0.2s ease;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.25);
+    }
+
+    .dark *::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .dark *::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+}
+
+/* ════════════════════════════════════════════════
+   Tick Flip Countdown Custom Styling
+   ════════════════════════════════════════════════ */
+
+.tick {
+    font-family: inherit !important;
+    font-weight: 700 !important;
+}
+
+/* Base Panel Styling - Light Mode */
+.tick .tick-flip-panel-front,
+.tick .tick-flip-panel-back,
+.tick .tick-flip-panel {
+    background-color: #ffffff !important;
+    color: #1a1a2e !important;
+    border-color: #ffffff !important;
+}
+
+/* Dark Mode Overrides */
+/* Shadows - Disabled for ultra-flat look */
+.tick .tick-flip-panel {
+    box-shadow: none !important;
+}
+
+.dark .tick .tick-flip-panel {
+    box-shadow: none !important;
+}
+.dark .tick .tick-flip-panel-front,
+.dark .tick .tick-flip-panel-back,
+.dark .tick .tick-flip-panel {
+    background-color: #1a1a1a !important;
+    border-color: #1a1a1a !important;
+    color: #ffffff !important;
 }

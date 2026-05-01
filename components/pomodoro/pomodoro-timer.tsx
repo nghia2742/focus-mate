@@ -1,116 +1,65 @@
 "use client";
 
 import { usePomodoro } from "@/hooks/use-pomodoro";
+import { Target, XCircle } from "lucide-react";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
 import { PomodoroControls } from "./pomodoro-controls";
 import { PomodoroDisplay } from "./pomodoro-display";
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-import { useSettings } from "@/store/use-settings";
 
 export function PomodoroTimer() {
-    const { mode, status, timeLeft, cycleCount, start, pause, reset } = usePomodoro();
-    const { focusMinutes, shortBreakMinutes, longBreakMinutes } = useSettings();
-
-    const getTotalDuration = (m: string) => {
-        switch (m) {
-            case "focus":
-                return focusMinutes * 60;
-            case "short-break":
-                return shortBreakMinutes * 60;
-            case "long-break":
-                return longBreakMinutes * 60;
-            default:
-                return focusMinutes * 60;
-        }
-    };
-
-    const total = getTotalDuration(mode);
-    const elapsedPercent =
-        total > 0
-            ? Math.max(0, Math.min(100, Math.round(((total - timeLeft) / total) * 100)))
-            : 0;
+    const {
+        mode, status, timeLeft, cycleCount,
+        start, pause, reset, stop, skip,
+        activeTodoTitle, setActiveTodo
+    } = usePomodoro();
 
     return (
-        <div className="relative flex flex-col items-center gap-6">
-            <GlassCircle percent={elapsedPercent}>
-                <div className="text-center space-y-2">
-                    <h2 className="text-xl font-semibold capitalize">{mode.replace("-", " ")}</h2>
-                    <div className="text-6xl font-extrabold">
-                        <PomodoroDisplay timeLeft={timeLeft} />
-                    </div>
+        <div className="relative flex flex-col items-center gap-8 p-12 rounded-[40px] glass-panel backdrop-blur-xs transition-all duration-500">
+            <div className="text-center space-y-1">
+                <h2 className="text-sm font-bold tracking-[0.3em] text-black dark:text-white uppercase">
+                    {mode.replace("-", " ")}
+                </h2>
+                <div className="text-black dark:text-white text-xs font-semibold opacity-60">
+                    Cycle #{cycleCount + 1}
                 </div>
-            </GlassCircle>
+            </div>
 
-            <PomodoroControls status={status} start={start} pause={pause} reset={reset} />
+            <div className="flex flex-col items-center gap-6 w-full">
+                <div className="flex items-center justify-center w-full py-4 scale-110">
+                    <PomodoroDisplay timeLeft={timeLeft} />
+                </div>
 
-            <div className="text-gray-600 dark:text-gray-300 font-bold">🔥 {cycleCount}</div>
-        </div>
-    );
-}
-
-function GlassCircle({ percent, children }: { percent: number; children: React.ReactNode }) {
-    const size = 340;
-    const ring = 12;
-    const inner = size - ring * 2;
-    const radius = (size - ring) / 2;
-    const circumference = 2 * Math.PI * radius;
-    const clamped = Math.max(0, Math.min(100, percent));
-    const offset = circumference - (clamped / 100) * circumference;
-
-    return (
-        <div className="relative" style={{ width: size, height: size }}>
-            {/* Progress ring outside the glass */}
-            <svg className="absolute inset-0 -rotate-90" width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-                <defs>
-                    <linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stopColor="rgba(56,189,248,0.9)" />
-                        <stop offset="100%" stopColor="rgba(59,130,246,0.9)" />
-                    </linearGradient>
-                </defs>
-                {/* track */}
-                <circle
-                    cx={size / 2}
-                    cy={size / 2}
-                    r={radius}
-                    stroke="rgba(255,255,255,0.25)"
-                    strokeWidth={ring}
-                    fill="none"
-                />
-                {/* progress */}
-                <motion.circle
-                    cx={size / 2}
-                    cy={size / 2}
-                    r={radius}
-                    stroke="url(#ring-grad)"
-                    strokeWidth={ring}
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeDasharray={circumference}
-                    strokeDashoffset={offset}
-                    animate={{ strokeDashoffset: offset }}
-                    transition={{ duration: 0.5, ease: "easeInOut" }}
-                />
-            </svg>
-
-            {/* Inner glass content */}
-            <div
-                className={cn(
-                    "absolute inset-[12px] rounded-full",
-                    "backdrop-blur-xl border border-white/25",
-                    "shadow-[inset_0_40px_80px_-40px_rgba(255,255,255,0.6),0_30px_80px_-20px_rgba(0,0,0,0.35)]",
-                    "overflow-visible"
+                {activeTodoTitle && (
+                    <div className="flex items-center gap-3 px-4 py-2 rounded-full glass bg-emerald-500/10 border border-emerald-500/20 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                        {/* <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">Focusing on:</span>
+                        <span className="text-xs font-medium text-white truncate max-w-[150px]">{activeTodoTitle}</span>
+                        <button 
+                            onClick={() => setActiveTodo(null, null)}
+                            className="text-white/20 hover:text-red-400 transition-colors"
+                        >
+                            <XCircle className="size-4" />
+                        </button> */}
+                        <Badge variant="secondary">
+                            <Target data-icon="inline-start" />
+                            {activeTodoTitle}
+                            <Button onClick={() => setActiveTodo(null, null)}>
+                                <XCircle className="size-4" />
+                            </Button>
+                        </Badge>
+                    </div>
                 )}
-                style={{ width: inner, height: inner }}
-            >
-                {/* Subtle blue transparent liquid tint (no waves) */}
-                <div className="absolute inset-0 rounded-full bg-[radial-gradient(120%_100%_at_50%_20%,rgba(56,189,248,0.25),rgba(255,255,255,0.08)_55%,rgba(0,0,0,0.15)_100%)]" />
-                {/* Inner highlight */}
-                <div className="absolute inset-x-6 top-4 h-1/3 rounded-full bg-white/25 blur-2xl" />
-                {/* Rim highlight */}
-                <div className="absolute inset-0 rounded-full ring-1 ring-white/20" />
+            </div>
 
-                {/* Centered timer */}
-                <div className="absolute inset-0 grid place-items-center">{children}</div>
+            <div className="w-full pt-4">
+                <PomodoroControls
+                    status={status}
+                    start={start}
+                    pause={pause}
+                    reset={reset}
+                    stop={stop}
+                    skip={skip}
+                />
             </div>
         </div>
     );

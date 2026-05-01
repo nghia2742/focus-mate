@@ -1,8 +1,8 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { LoaderIcon, Moon, Sun } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { LoaderIcon, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -34,25 +34,24 @@ export function ThemeToggle() {
     }, [mounted, handleKeyDown]);
 
     return (
-        <div className="absolute top-0 left-0 m-4">
-            <Button
-                variant={"outline"}
-                size="icon"
-                onClick={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
-            >
-                <AnimatePresence mode="wait" initial={false}>
-                    <motion.span
-                        key={theme}
-                        initial={{ y: -6, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: 6, opacity: 0 }}
-                        transition={{ duration: 0.18 }}
-                        className="inline-flex"
-                    >
-                        {mounted ? (theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />) : <LoaderIcon className='animate-spin'/>}
-                    </motion.span>
-                </AnimatePresence>
-            </Button>
-        </div>
+        <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
+            className="transition-all size-8 flex-shrink-0 hover:bg-transparent dark:hover:bg-transparent"
+        >
+            <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                    key={theme}
+                    initial={{ y: -6, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: 6, opacity: 0 }}
+                    transition={{ duration: 0.18 }}
+                    className="inline-flex items-center justify-center"
+                >
+                    {mounted ? (theme === 'light' ? <Sun className="w-4 h-4 text-yellow-500" /> : <Moon className="w-4 h-4 text-violet-500" />) : <LoaderIcon className='w-4 h-4 animate-spin' />}
+                </motion.span>
+            </AnimatePresence>
+        </Button>
     );
 }

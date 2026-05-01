@@ -1,19 +1,13 @@
-import React from "react";
+"use client";
 
-interface PomodoroDisplayProps {
-  timeLeft: number;
-}
+import dynamic from "next/dynamic";
 
-export function PomodoroDisplay({ timeLeft }: PomodoroDisplayProps) {
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
-  const pad = (n: number) => n.toString().padStart(2, "0");
+const FlipCountdown = dynamic(
+  () => import("./flip-countdown").then((mod) => mod.FlipCountdown),
+  { ssr: false }
+);
 
-  return (
-    <div className="text-center">
-      <div className="text-6xl font-bold tabular-nums">
-        {pad(minutes)}:{pad(seconds)}
-      </div>
-    </div>
-  );
+export function PomodoroDisplay({ timeLeft }: { timeLeft: number }) {
+
+  return <FlipCountdown timeLeft={timeLeft} />;
 }

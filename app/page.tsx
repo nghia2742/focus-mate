@@ -1,23 +1,21 @@
-"use client";
-
-export const dynamic = "force-dynamic";
-
-import { ThemeToggle } from "@/components/theme/theme-toggle";
-import { GlassBackground } from "@/components/theme/glass-background";
 import { PomodoroTimer } from "@/components/pomodoro/pomodoro-timer";
-import { YoutubePlayer } from "@/components/sounds/youtube-player";
-import { AIConsultant } from "@/components/ai/ai-consultant";
-import { SettingsButton } from "@/components/settings/settings-button";
+import { MiniAppDock } from "@/components/widgets";
+import { TopBar } from "@/components/layout/top-bar";
 
 export default function Home() {
   return (
-    <div className="relative overflow-hidden min-h-screen flex flex-col items-center justify-center gap-8 p-8">
-      <GlassBackground />
-      <ThemeToggle />
-      <PomodoroTimer />
-      <YoutubePlayer />
-      <AIConsultant />
-      <SettingsButton />
+    <div className="min-h-screen w-full flex flex-col items-center justify-center p-8">
+      <TopBar />
+      
+      {/* Timer — full attention, no competing widgets */}
+      <div className="flex items-center justify-center">
+        <PomodoroTimer />
+      </div>
+
+      {/* Mini-app dock — sits at the bottom like macOS dock */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40">
+        <MiniAppDock />
+      </div>
     </div>
   );
 }

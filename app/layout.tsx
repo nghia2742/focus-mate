@@ -1,9 +1,11 @@
+import { Background } from '@/components/background';
+
 import { ThemeProvider } from '@/components/theme/theme-provider';
+import { Toaster } from '@/components/ui/sonner';
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import { Toaster } from '@/components/ui/sonner';
-import { Analytics } from "@vercel/analytics/next"
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -20,6 +22,11 @@ export const metadata: Metadata = {
   description: 'A productivity app to help you focus',
 };
 
+import { InitialLoader } from '@/components/layout/initial-loader';
+import { PomodoroProvider } from '@/components/providers/pomodoro-provider';
+import { QueryProvider } from '@/components/providers/query-provider';
+import { TooltipProvider } from '@/components/ui/tooltip';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,13 +35,28 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased text-foreground`}
       >
-        <ThemeProvider>
-          {children}
-          <Toaster position='top-right' />
-        </ThemeProvider>
-        <Analytics />
+        <QueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <PomodoroProvider>
+              <TooltipProvider>
+                <Background />
+                <InitialLoader />
+                <main className="relative w-full overflow-hidden">
+                  {children}
+                </main>
+                <Toaster position='top-right' />
+                <Analytics />
+              </TooltipProvider>
+            </PomodoroProvider>
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );

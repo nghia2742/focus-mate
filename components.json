@@ -18,5 +18,8 @@
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  "registries": {}
+  "registries": {
+    "@magicui": "https://magicui.design/r/{name}",
+    "@supabase": "https://supabase.com/ui/r/{name}.json"
+  }
 }
