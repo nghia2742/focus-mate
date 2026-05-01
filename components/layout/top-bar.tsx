@@ -4,7 +4,9 @@ import { AuthButton } from "@/components/auth/auth-button";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { useDailyStats } from "@/hooks/use-daily-stats";
 import { useProfile } from "@/hooks/use-profile";
-import { Clock, Flame } from "lucide-react";
+import { useUser } from "@/hooks/use-user";
+import { Clock, Flame, Lock } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export function TopBar() {
     const { data: dailyStats } = useDailyStats();
@@ -16,7 +18,8 @@ export function TopBar() {
     return (
         <div className="fixed top-0 left-0 w-full px-4 py-2 flex justify-between items-center z-50 border-b-0 rounded-none border-x-0 transition-colors">
             {/* Top Left: Stats */}
-            <div className="flex items-center gap-4 glass-panel p-2 px-4">
+            <div className="flex relative items-center gap-4 glass-panel p-2 px-4">
+                <TooltipLock />
                 {/* Streak */}
                 <div
                     className="flex items-center gap-2"
@@ -56,4 +59,20 @@ export function TopBar() {
             </div>
         </div>
     );
+}
+
+
+function TooltipLock() {
+    const { isAuthenticated } = useUser()
+    if (isAuthenticated) return null;
+    return (
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <Lock className="size-5 glass-text" />
+            </TooltipTrigger>
+            <TooltipContent className="glass border-none text-foreground font-medium px-4 py-2 rounded-xl backdrop-blur-xl">
+                <p>Sign in to see your achievements.</p>
+            </TooltipContent>
+        </Tooltip>
+    )
 }

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 export function Background() {
-  const [backgroundStr, setBackgroundStr] = useState<string>('');
+  const [backgroundStr, setBackgroundStr] = useState<string>('/backgrounds/bg1.jpg');
 
   useEffect(() => {
     // Read initial background

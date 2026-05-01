@@ -1,15 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { cn } from "@/lib/utils";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { MacOSDock, type DockApp } from "@/components/ui/mac-os-dock";
+import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { SettingsPanels } from "../settings/settings-panels";
-import { TodoWidget } from "./todo-widget";
-import { NotesWidget } from "./notes-widget";
-import { MusicWidget } from "./music-widget";
 import { GoalWidget } from "./goal-widget";
+import { MusicWidget } from "./music-widget";
+import { NotesWidget } from "./notes-widget";
 import { PhotosWidget } from "./photos-widget";
+import { TodoWidget } from "./todo-widget";
 
 const DOCK_APPS: DockApp[] = [
     { id: "tasks", name: "Tasks", icon: "https://cdn.jim-nielsen.com/macos/512/meistertask-task-management-2017-03-10.png?rf=1024", tooltip: "Manage your daily focus tasks" },
@@ -23,6 +24,7 @@ const DOCK_APPS: DockApp[] = [
 export function MiniAppDock({ className }: { className?: string }) {
     const [openApp, setOpenApp] = useState<string | null>(null);
     const [mounted, setMounted] = useState(false);
+    const notReadyToUse = ["notes", "goal"]
 
     useEffect(() => { setMounted(true); }, []);
 
@@ -56,7 +58,7 @@ export function MiniAppDock({ className }: { className?: string }) {
         <>
             <MacOSDock
                 apps={DOCK_APPS}
-                onAppClick={(id) => setOpenApp(prev => prev === id ? null : id)}
+                onAppClick={(id) => notReadyToUse.includes(id) ? toast.info(`${DOCK_APPS.find(x => x.id === id)?.name} is not ready yet. Check back soon!`) : setOpenApp(prev => prev === id ? null : id)}
                 openApps={openApp ? [openApp] : []}
                 className={className}
             />

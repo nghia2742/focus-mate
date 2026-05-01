@@ -1,9 +1,9 @@
 "use client";
 
 import { useUser } from "@/hooks/use-user";
-import { Lock, Loader2 } from "lucide-react";
-import { AuthButton } from "./auth-button";
 import { cn } from "@/lib/utils";
+import { Loader2, Lock } from "lucide-react";
+import { AuthButton } from "./auth-button";
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -12,8 +12,8 @@ interface AuthGuardProps {
   description?: string;
 }
 
-export function AuthGuard({ 
-  children, 
+export function AuthGuard({
+  children,
   className,
   title = "Sign in to access",
   description = "Connect your account to sync and track your progress."
@@ -40,9 +40,9 @@ export function AuthGuard({
         {/* Overlay Content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-black/5 backdrop-blur-[2px]">
           <div className="size-14 rounded-2xl glass flex items-center justify-center mb-6 shadow-xl ring-1 ring-white/10">
-            <Lock className="size-6 text-white/40" />
+            <Lock className="size-6 glass-text" />
           </div>
-          
+
           <div className="space-y-2 mb-8 max-w-[240px]">
             <h3 className="text-xl font-bold glass-text tracking-tight">{title}</h3>
             <p className="text-sm glass-text-faint leading-relaxed">

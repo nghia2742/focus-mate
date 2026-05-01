@@ -22,9 +22,10 @@ export const metadata: Metadata = {
   description: 'A productivity app to help you focus',
 };
 
-import { QueryProvider } from '@/components/providers/query-provider';
-import { PomodoroProvider } from '@/components/providers/pomodoro-provider';
 import { InitialLoader } from '@/components/layout/initial-loader';
+import { PomodoroProvider } from '@/components/providers/pomodoro-provider';
+import { QueryProvider } from '@/components/providers/query-provider';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 export default function RootLayout({
   children,
@@ -44,13 +45,15 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <PomodoroProvider>
-              <Background />
-              <InitialLoader />
-              <main className="relative w-full overflow-hidden">
-                {children}
-              </main>
-              <Toaster position='top-right' />
-              <Analytics />
+              <TooltipProvider>
+                <Background />
+                <InitialLoader />
+                <main className="relative w-full overflow-hidden">
+                  {children}
+                </main>
+                <Toaster position='top-right' />
+                <Analytics />
+              </TooltipProvider>
             </PomodoroProvider>
           </ThemeProvider>
         </QueryProvider>

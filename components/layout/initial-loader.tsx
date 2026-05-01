@@ -37,7 +37,7 @@ export function InitialLoader() {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background"
+          className="fixed inset-0 z-100 flex flex-col items-center justify-center bg-background"
         >
           <AppleHelloEnglishEffect
             className="text-foreground h-24"
